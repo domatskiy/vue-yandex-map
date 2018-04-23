@@ -105,7 +105,6 @@ export default {
         })
         .add('stop', function (e) {
 
-          console.log('map stop event');
           vm.drag = false;
 
           cursor.remove();
