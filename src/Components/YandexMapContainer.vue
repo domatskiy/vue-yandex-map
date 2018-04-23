@@ -2,7 +2,7 @@
     <div :id="mapId" :style="style" :class="mapClass"></div>
 </template>
 <script>
-import YandexMapBus from './yandex-map-bus'
+import YandexMapBus from './../yandex-map-bus'
 
 export default {
   name: 'yandexMap',
@@ -47,11 +47,8 @@ export default {
       default: true
     }
   },
-  created: function () {
-    // console.log('container created this.$yandexmap=', this.$yandexmap)
-    this.YandexMapBus.$on('yandexmap-attached', () => {})
-    this.YandexMapBus.$on('yandexmap-loaded', () => {})
-    this.YandexMapBus.$on('yandexmap-ready', () => {
+  methods: {
+    init: function () {
       // console.log('on yandexmap-ready')
       let center = this.center ? this.center : [55.753215, 37.622504]
 
@@ -71,7 +68,22 @@ export default {
       }
 
       this.$emit('created', $map)
+    }
+  },
+  created: function () {
+
+  },
+  mounted: function () {
+
+    this.YandexMapBus.$on('yandexmap-attached', () => {})
+    this.YandexMapBus.$on('yandexmap-loaded', () => {})
+    this.YandexMapBus.$on('yandexmap-ready', () => {
+      this.init()
     })
+
+    if (this.YandexMapBus.ymapReady) {
+      this.init()
+    }
   },
   watch: {
 

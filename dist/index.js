@@ -29,8 +29,36 @@
             return __webpack_require__.d(getter, "a", getter), getter;
         }, __webpack_require__.o = function(object, property) {
             return Object.prototype.hasOwnProperty.call(object, property);
-        }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 2);
-    }([ function(module, exports) {
+        }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 15);
+    }([ function(module, exports, __webpack_require__) {
+        module.exports = !__webpack_require__(4)(function() {
+            return 7 != Object.defineProperty({}, "a", {
+                get: function() {
+                    return 7;
+                }
+            }).a;
+        });
+    }, function(module, exports) {
+        var global = module.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();
+        "number" == typeof __g && (__g = global);
+    }, function(module, exports) {
+        var core = module.exports = {
+            version: "2.5.5"
+        };
+        "number" == typeof __e && (__e = core);
+    }, function(module, exports) {
+        module.exports = function(it) {
+            return "object" == typeof it ? null !== it : "function" == typeof it;
+        };
+    }, function(module, exports) {
+        module.exports = function(exec) {
+            try {
+                return !!exec();
+            } catch (e) {
+                return !0;
+            }
+        };
+    }, function(module, exports) {
         var g;
         g = function() {
             return this;
@@ -41,72 +69,68 @@
             "object" == typeof window && (g = window);
         }
         module.exports = g;
-    }, , function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        Object.defineProperty(__webpack_exports__, "__esModule", {
-            value: !0
-        });
-        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(39), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(21), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(5), yandexMap = function() {
-            function yandexMap(options) {
-                __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, yandexMap);
-            }
-            return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(yandexMap, [ {
-                key: "getOptions",
-                value: function() {
-                    return this.options;
-                }
-            } ]), yandexMap;
-        }(), YandexMapPlugin = {
-            install: function(VueInstance, options) {
-                var opts = {};
-                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default()(opts, {
-                    version: "2.1",
-                    lang: "ru_RU"
-                }, options), __WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions = opts;
-                var $yandexmap = new yandexMap(__WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions);
-                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(12));
-            }
-        };
-        "undefined" != typeof window && window.Vue && window.Vue.use(YandexMapPlugin), __webpack_exports__.default = YandexMapPlugin;
-    }, , function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5), YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue__.a({
-            options: {},
-            data: function() {
-                return {
-                    options: this.options,
-                    events: {},
-                    ymapReady: !1,
-                    scriptAttached: !1
+    }, function(module, exports, __webpack_require__) {
+        var global = __webpack_require__(1), core = __webpack_require__(2), ctx = __webpack_require__(19), hide = __webpack_require__(21), has = __webpack_require__(8), $export = function(type, name, source) {
+            var key, own, out, IS_FORCED = type & $export.F, IS_GLOBAL = type & $export.G, IS_STATIC = type & $export.S, IS_PROTO = type & $export.P, IS_BIND = type & $export.B, IS_WRAP = type & $export.W, exports = IS_GLOBAL ? core : core[name] || (core[name] = {}), expProto = exports.prototype, target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {}).prototype;
+            IS_GLOBAL && (source = name);
+            for (key in source) (own = !IS_FORCED && target && void 0 !== target[key]) && has(exports, key) || (out = own ? target[key] : source[key], 
+            exports[key] = IS_GLOBAL && "function" != typeof target[key] ? source[key] : IS_BIND && own ? ctx(out, global) : IS_WRAP && target[key] == out ? function(C) {
+                var F = function(a, b, c) {
+                    if (this instanceof C) {
+                        switch (arguments.length) {
+                          case 0:
+                            return new C();
+
+                          case 1:
+                            return new C(a);
+
+                          case 2:
+                            return new C(a, b);
+                        }
+                        return new C(a, b, c);
+                    }
+                    return C.apply(this, arguments);
                 };
-            },
-            created: function() {
-                var _this = this, yandexMapScript = document.createElement("SCRIPT");
-                yandexMapScript.setAttribute("src", "https://api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang), 
-                yandexMapScript.setAttribute("async", ""), yandexMapScript.setAttribute("defer", ""), 
-                document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached"), 
-                yandexMapScript.onload = function() {
-                    _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
-                        _this.ymapReady = !0, _this.$emit("yandexmap-ready");
-                    });
-                }, this.$watch(function() {
-                    return __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions;
-                }, function(newVal, oldVal) {
-                    console.info("1111111111111111111111111111");
-                }, {
-                    deep: !0
-                });
-            },
-            methods: {
-                init: function(options) {
-                    console.log("init ========", options);
-                },
-                isReady: function() {
-                    return this.ymapReady;
-                }
-            }
-        });
-        __webpack_exports__.a = YandexMapBus;
+                return F.prototype = C.prototype, F;
+            }(out) : IS_PROTO && "function" == typeof out ? ctx(Function.call, out) : out, IS_PROTO && ((exports.virtual || (exports.virtual = {}))[key] = out, 
+            type & $export.R && expProto && !expProto[key] && hide(expProto, key, out)));
+        };
+        $export.F = 1, $export.G = 2, $export.S = 4, $export.P = 8, $export.B = 16, $export.W = 32, 
+        $export.U = 64, $export.R = 128, module.exports = $export;
+    }, function(module, exports, __webpack_require__) {
+        var anObject = __webpack_require__(22), IE8_DOM_DEFINE = __webpack_require__(23), toPrimitive = __webpack_require__(25), dP = Object.defineProperty;
+        exports.f = __webpack_require__(0) ? Object.defineProperty : function(O, P, Attributes) {
+            if (anObject(O), P = toPrimitive(P, !0), anObject(Attributes), IE8_DOM_DEFINE) try {
+                return dP(O, P, Attributes);
+            } catch (e) {}
+            if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
+            return "value" in Attributes && (O[P] = Attributes.value), O;
+        };
+    }, function(module, exports) {
+        var hasOwnProperty = {}.hasOwnProperty;
+        module.exports = function(it, key) {
+            return hasOwnProperty.call(it, key);
+        };
+    }, function(module, exports, __webpack_require__) {
+        var IObject = __webpack_require__(10), defined = __webpack_require__(11);
+        module.exports = function(it) {
+            return IObject(defined(it));
+        };
+    }, function(module, exports, __webpack_require__) {
+        var cof = __webpack_require__(30);
+        module.exports = Object("z").propertyIsEnumerable(0) ? Object : function(it) {
+            return "String" == cof(it) ? it.split("") : Object(it);
+        };
+    }, function(module, exports) {
+        module.exports = function(it) {
+            if (void 0 == it) throw TypeError("Can't call method on  " + it);
+            return it;
+        };
+    }, function(module, exports) {
+        var ceil = Math.ceil, floor = Math.floor;
+        module.exports = function(it) {
+            return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+        };
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         (function(global, setImmediate) {
@@ -2556,7 +2580,312 @@
             }, inBrowser && setTimeout(function() {
                 config.devtools && devtools && devtools.emit("init", Vue);
             }, 0), __webpack_exports__.a = Vue;
-        }).call(__webpack_exports__, __webpack_require__(0), __webpack_require__(6).setImmediate);
+        }).call(__webpack_exports__, __webpack_require__(5), __webpack_require__(46).setImmediate);
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(50);
+        __webpack_exports__.a = {
+            name: "yandexMap",
+            data: function() {
+                return {
+                    YandexMapBus: __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a,
+                    mapId: "yandex-map-" + Math.round(1e6 * Math.random()),
+                    style: this.ymapClass ? "" : "width: 100%; height: 100%;",
+                    mapClass: "yandex-map"
+                };
+            },
+            props: {
+                center: {
+                    type: Array,
+                    validator: function(val) {
+                        return !val.filter(function(item) {
+                            return isNaN(item);
+                        }).length;
+                    },
+                    required: !1
+                },
+                controls: {
+                    type: Array,
+                    validator: function(val) {
+                        return !val.filter(function(item) {
+                            return isNaN(item);
+                        }).length;
+                    },
+                    required: !1,
+                    default: function() {
+                        return [];
+                    }
+                },
+                zoom: {
+                    validator: function(val) {
+                        return !isNaN(val);
+                    },
+                    default: 15
+                },
+                dragable: {
+                    type: Boolean,
+                    default: !0
+                },
+                scrollZoom: {
+                    type: Boolean,
+                    default: !0
+                }
+            },
+            methods: {
+                init: function() {
+                    var center = this.center ? this.center : [ 55.753215, 37.622504 ], $map = new window.ymaps.Map(this.mapId, {
+                        center: center,
+                        zoom: this.zoom,
+                        controls: this.controls,
+                        type: "yandex#map"
+                    }, {});
+                    this.dragable || $map.behaviors.disable("drag"), this.scrollZoom || $map.behaviors.disable("scrollZoom"), 
+                    this.$emit("created", $map);
+                }
+            },
+            created: function() {},
+            mounted: function() {
+                var _this = this;
+                this.YandexMapBus.$on("yandexmap-attached", function() {}), this.YandexMapBus.$on("yandexmap-loaded", function() {}), 
+                this.YandexMapBus.$on("yandexmap-ready", function() {
+                    _this.init();
+                }), this.YandexMapBus.ymapReady && this.init();
+            },
+            watch: {},
+            beforeDestroy: function() {}
+        };
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(__webpack_exports__, "__esModule", {
+            value: !0
+        });
+        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(16), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(41), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(42), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(13), yandexMap = function() {
+            function yandexMap(options) {
+                __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, yandexMap);
+            }
+            return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default()(yandexMap, [ {
+                key: "getOptions",
+                value: function() {
+                    return this.options;
+                }
+            } ]), yandexMap;
+        }(), YandexMapPlugin = {
+            install: function(VueInstance, options) {
+                var opts = {};
+                __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default()(opts, {
+                    version: "2.1",
+                    lang: "ru_RU"
+                }, options), __WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions = opts;
+                var $yandexmap = new yandexMap(__WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions);
+                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(49));
+            }
+        };
+        "undefined" != typeof window && window.Vue && window.Vue.use(YandexMapPlugin), __webpack_exports__.default = YandexMapPlugin;
+    }, function(module, exports, __webpack_require__) {
+        module.exports = {
+            default: __webpack_require__(17),
+            __esModule: !0
+        };
+    }, function(module, exports, __webpack_require__) {
+        __webpack_require__(18), module.exports = __webpack_require__(2).Object.assign;
+    }, function(module, exports, __webpack_require__) {
+        var $export = __webpack_require__(6);
+        $export($export.S + $export.F, "Object", {
+            assign: __webpack_require__(27)
+        });
+    }, function(module, exports, __webpack_require__) {
+        var aFunction = __webpack_require__(20);
+        module.exports = function(fn, that, length) {
+            if (aFunction(fn), void 0 === that) return fn;
+            switch (length) {
+              case 1:
+                return function(a) {
+                    return fn.call(that, a);
+                };
+
+              case 2:
+                return function(a, b) {
+                    return fn.call(that, a, b);
+                };
+
+              case 3:
+                return function(a, b, c) {
+                    return fn.call(that, a, b, c);
+                };
+            }
+            return function() {
+                return fn.apply(that, arguments);
+            };
+        };
+    }, function(module, exports) {
+        module.exports = function(it) {
+            if ("function" != typeof it) throw TypeError(it + " is not a function!");
+            return it;
+        };
+    }, function(module, exports, __webpack_require__) {
+        var dP = __webpack_require__(7), createDesc = __webpack_require__(26);
+        module.exports = __webpack_require__(0) ? function(object, key, value) {
+            return dP.f(object, key, createDesc(1, value));
+        } : function(object, key, value) {
+            return object[key] = value, object;
+        };
+    }, function(module, exports, __webpack_require__) {
+        var isObject = __webpack_require__(3);
+        module.exports = function(it) {
+            if (!isObject(it)) throw TypeError(it + " is not an object!");
+            return it;
+        };
+    }, function(module, exports, __webpack_require__) {
+        module.exports = !__webpack_require__(0) && !__webpack_require__(4)(function() {
+            return 7 != Object.defineProperty(__webpack_require__(24)("div"), "a", {
+                get: function() {
+                    return 7;
+                }
+            }).a;
+        });
+    }, function(module, exports, __webpack_require__) {
+        var isObject = __webpack_require__(3), document = __webpack_require__(1).document, is = isObject(document) && isObject(document.createElement);
+        module.exports = function(it) {
+            return is ? document.createElement(it) : {};
+        };
+    }, function(module, exports, __webpack_require__) {
+        var isObject = __webpack_require__(3);
+        module.exports = function(it, S) {
+            if (!isObject(it)) return it;
+            var fn, val;
+            if (S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
+            if ("function" == typeof (fn = it.valueOf) && !isObject(val = fn.call(it))) return val;
+            if (!S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
+            throw TypeError("Can't convert object to primitive value");
+        };
+    }, function(module, exports) {
+        module.exports = function(bitmap, value) {
+            return {
+                enumerable: !(1 & bitmap),
+                configurable: !(2 & bitmap),
+                writable: !(4 & bitmap),
+                value: value
+            };
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        var getKeys = __webpack_require__(28), gOPS = __webpack_require__(38), pIE = __webpack_require__(39), toObject = __webpack_require__(40), IObject = __webpack_require__(10), $assign = Object.assign;
+        module.exports = !$assign || __webpack_require__(4)(function() {
+            var A = {}, B = {}, S = Symbol(), K = "abcdefghijklmnopqrst";
+            return A[S] = 7, K.split("").forEach(function(k) {
+                B[k] = k;
+            }), 7 != $assign({}, A)[S] || Object.keys($assign({}, B)).join("") != K;
+        }) ? function(target, source) {
+            for (var T = toObject(target), aLen = arguments.length, index = 1, getSymbols = gOPS.f, isEnum = pIE.f; aLen > index; ) for (var key, S = IObject(arguments[index++]), keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S), length = keys.length, j = 0; length > j; ) isEnum.call(S, key = keys[j++]) && (T[key] = S[key]);
+            return T;
+        } : $assign;
+    }, function(module, exports, __webpack_require__) {
+        var $keys = __webpack_require__(29), enumBugKeys = __webpack_require__(37);
+        module.exports = Object.keys || function(O) {
+            return $keys(O, enumBugKeys);
+        };
+    }, function(module, exports, __webpack_require__) {
+        var has = __webpack_require__(8), toIObject = __webpack_require__(9), arrayIndexOf = __webpack_require__(31)(!1), IE_PROTO = __webpack_require__(34)("IE_PROTO");
+        module.exports = function(object, names) {
+            var key, O = toIObject(object), i = 0, result = [];
+            for (key in O) key != IE_PROTO && has(O, key) && result.push(key);
+            for (;names.length > i; ) has(O, key = names[i++]) && (~arrayIndexOf(result, key) || result.push(key));
+            return result;
+        };
+    }, function(module, exports) {
+        var toString = {}.toString;
+        module.exports = function(it) {
+            return toString.call(it).slice(8, -1);
+        };
+    }, function(module, exports, __webpack_require__) {
+        var toIObject = __webpack_require__(9), toLength = __webpack_require__(32), toAbsoluteIndex = __webpack_require__(33);
+        module.exports = function(IS_INCLUDES) {
+            return function($this, el, fromIndex) {
+                var value, O = toIObject($this), length = toLength(O.length), index = toAbsoluteIndex(fromIndex, length);
+                if (IS_INCLUDES && el != el) {
+                    for (;length > index; ) if ((value = O[index++]) != value) return !0;
+                } else for (;length > index; index++) if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
+                return !IS_INCLUDES && -1;
+            };
+        };
+    }, function(module, exports, __webpack_require__) {
+        var toInteger = __webpack_require__(12), min = Math.min;
+        module.exports = function(it) {
+            return it > 0 ? min(toInteger(it), 9007199254740991) : 0;
+        };
+    }, function(module, exports, __webpack_require__) {
+        var toInteger = __webpack_require__(12), max = Math.max, min = Math.min;
+        module.exports = function(index, length) {
+            return index = toInteger(index), index < 0 ? max(index + length, 0) : min(index, length);
+        };
+    }, function(module, exports, __webpack_require__) {
+        var shared = __webpack_require__(35)("keys"), uid = __webpack_require__(36);
+        module.exports = function(key) {
+            return shared[key] || (shared[key] = uid(key));
+        };
+    }, function(module, exports, __webpack_require__) {
+        var global = __webpack_require__(1), store = global["__core-js_shared__"] || (global["__core-js_shared__"] = {});
+        module.exports = function(key) {
+            return store[key] || (store[key] = {});
+        };
+    }, function(module, exports) {
+        var id = 0, px = Math.random();
+        module.exports = function(key) {
+            return "Symbol(".concat(void 0 === key ? "" : key, ")_", (++id + px).toString(36));
+        };
+    }, function(module, exports) {
+        module.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
+    }, function(module, exports) {
+        exports.f = Object.getOwnPropertySymbols;
+    }, function(module, exports) {
+        exports.f = {}.propertyIsEnumerable;
+    }, function(module, exports, __webpack_require__) {
+        var defined = __webpack_require__(11);
+        module.exports = function(it) {
+            return Object(defined(it));
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0, exports.default = function(instance, Constructor) {
+            if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
+        };
+    }, function(module, exports, __webpack_require__) {
+        "use strict";
+        exports.__esModule = !0;
+        var _defineProperty = __webpack_require__(43), _defineProperty2 = function(obj) {
+            return obj && obj.__esModule ? obj : {
+                default: obj
+            };
+        }(_defineProperty);
+        exports.default = function() {
+            function defineProperties(target, props) {
+                for (var i = 0; i < props.length; i++) {
+                    var descriptor = props[i];
+                    descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 
+                    "value" in descriptor && (descriptor.writable = !0), (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+                }
+            }
+            return function(Constructor, protoProps, staticProps) {
+                return protoProps && defineProperties(Constructor.prototype, protoProps), staticProps && defineProperties(Constructor, staticProps), 
+                Constructor;
+            };
+        }();
+    }, function(module, exports, __webpack_require__) {
+        module.exports = {
+            default: __webpack_require__(44),
+            __esModule: !0
+        };
+    }, function(module, exports, __webpack_require__) {
+        __webpack_require__(45);
+        var $Object = __webpack_require__(2).Object;
+        module.exports = function(it, key, desc) {
+            return $Object.defineProperty(it, key, desc);
+        };
+    }, function(module, exports, __webpack_require__) {
+        var $export = __webpack_require__(6);
+        $export($export.S + $export.F * !__webpack_require__(0), "Object", {
+            defineProperty: __webpack_require__(7).f
+        });
     }, function(module, exports, __webpack_require__) {
         (function(global) {
             function Timeout(id, clearFn) {
@@ -2581,9 +2910,9 @@
                 msecs >= 0 && (item._idleTimeoutId = setTimeout(function() {
                     item._onTimeout && item._onTimeout();
                 }, msecs));
-            }, __webpack_require__(7), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
+            }, __webpack_require__(47), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
             exports.clearImmediate = "undefined" != typeof self && self.clearImmediate || void 0 !== global && global.clearImmediate || this && this.clearImmediate;
-        }).call(exports, __webpack_require__(0));
+        }).call(exports, __webpack_require__(5));
     }, function(module, exports, __webpack_require__) {
         (function(global, process) {
             !function(global, undefined) {
@@ -2682,7 +3011,7 @@
                     }(), attachTo.setImmediate = setImmediate, attachTo.clearImmediate = clearImmediate;
                 }
             }("undefined" == typeof self ? void 0 === global ? this : global : self);
-        }).call(exports, __webpack_require__(0), __webpack_require__(8));
+        }).call(exports, __webpack_require__(5), __webpack_require__(48));
     }, function(module, exports) {
         function defaultSetTimout() {
             throw new Error("setTimeout has not been defined");
@@ -2772,7 +3101,71 @@
         }, process.umask = function() {
             return 0;
         };
-    }, , function(module, __webpack_exports__, __webpack_require__) {
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(__webpack_exports__, "__esModule", {
+            value: !0
+        });
+        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(51), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(52), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
+        Component.options.__file = "src\\Components\\YandexMapContainer.vue", __webpack_exports__.default = Component.exports;
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(13), YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue__.a({
+            options: {},
+            data: function() {
+                return {
+                    options: this.options,
+                    events: {},
+                    ymapReady: !1,
+                    scriptAttached: !1
+                };
+            },
+            created: function() {
+                var _this = this, yandexMapScript = document.createElement("SCRIPT");
+                yandexMapScript.setAttribute("src", "https://api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang), 
+                yandexMapScript.setAttribute("async", ""), yandexMapScript.setAttribute("defer", ""), 
+                document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached"), 
+                yandexMapScript.onload = function() {
+                    _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
+                        _this.ymapReady = !0, _this.$emit("yandexmap-ready");
+                    });
+                }, this.$watch(function() {
+                    return __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions;
+                }, function(newVal, oldVal) {
+                    console.info("1111111111111111111111111111");
+                }, {
+                    deep: !0
+                });
+            },
+            methods: {
+                init: function(options) {
+                    console.log("init ========", options);
+                },
+                isReady: function() {
+                    return this.ymapReady;
+                }
+            }
+        });
+        __webpack_exports__.a = YandexMapBus;
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return render;
+        }), __webpack_require__.d(__webpack_exports__, "b", function() {
+            return staticRenderFns;
+        });
+        var render = function() {
+            var _vm = this, _h = _vm.$createElement;
+            return (_vm._self._c || _h)("div", {
+                class: _vm.mapClass,
+                style: _vm.style,
+                attrs: {
+                    id: _vm.mapId
+                }
+            });
+        }, staticRenderFns = [];
+        render._withStripped = !0;
+    }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
             scriptExports = scriptExports || {};
@@ -2804,392 +3197,5 @@
             };
         }
         __webpack_exports__.a = normalizeComponent;
-    }, function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(4);
-        __webpack_exports__.a = {
-            name: "yandexMap",
-            data: function() {
-                return {
-                    YandexMapBus: __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a,
-                    mapId: "yandex-map-" + Math.round(1e6 * Math.random()),
-                    style: this.ymapClass ? "" : "width: 100%; height: 100%;",
-                    mapClass: "yandex-map"
-                };
-            },
-            props: {
-                center: {
-                    type: Array,
-                    validator: function(val) {
-                        return !val.filter(function(item) {
-                            return isNaN(item);
-                        }).length;
-                    },
-                    required: !1
-                },
-                controls: {
-                    type: Array,
-                    validator: function(val) {
-                        return !val.filter(function(item) {
-                            return isNaN(item);
-                        }).length;
-                    },
-                    required: !1,
-                    default: function() {
-                        return [];
-                    }
-                },
-                zoom: {
-                    validator: function(val) {
-                        return !isNaN(val);
-                    },
-                    default: 15
-                },
-                dragable: {
-                    type: Boolean,
-                    default: !0
-                },
-                scrollZoom: {
-                    type: Boolean,
-                    default: !0
-                }
-            },
-            created: function() {
-                var _this = this;
-                this.YandexMapBus.$on("yandexmap-attached", function() {}), this.YandexMapBus.$on("yandexmap-loaded", function() {}), 
-                this.YandexMapBus.$on("yandexmap-ready", function() {
-                    var center = _this.center ? _this.center : [ 55.753215, 37.622504 ], $map = new window.ymaps.Map(_this.mapId, {
-                        center: center,
-                        zoom: _this.zoom,
-                        controls: _this.controls,
-                        type: "yandex#map"
-                    }, {});
-                    _this.dragable || $map.behaviors.disable("drag"), _this.scrollZoom || $map.behaviors.disable("scrollZoom"), 
-                    _this.$emit("created", $map);
-                });
-            },
-            watch: {},
-            beforeDestroy: function() {}
-        };
-    }, function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        Object.defineProperty(__webpack_exports__, "__esModule", {
-            value: !0
-        });
-        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(11), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3d76e388_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(13), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(10), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3d76e388_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3d76e388_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
-        Component.options.__file = "src\\YandexMapContainer.vue", __webpack_exports__.default = Component.exports;
-    }, function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        __webpack_require__.d(__webpack_exports__, "a", function() {
-            return render;
-        }), __webpack_require__.d(__webpack_exports__, "b", function() {
-            return staticRenderFns;
-        });
-        var render = function() {
-            var _vm = this, _h = _vm.$createElement;
-            return (_vm._self._c || _h)("div", {
-                class: _vm.mapClass,
-                style: _vm.style,
-                attrs: {
-                    id: _vm.mapId
-                }
-            });
-        }, staticRenderFns = [];
-        render._withStripped = !0;
-    }, function(module, exports, __webpack_require__) {
-        "use strict";
-        exports.__esModule = !0, exports.default = function(instance, Constructor) {
-            if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
-        };
-    }, function(module, exports, __webpack_require__) {
-        module.exports = !__webpack_require__(20)(function() {
-            return 7 != Object.defineProperty({}, "a", {
-                get: function() {
-                    return 7;
-                }
-            }).a;
-        });
-    }, function(module, exports) {
-        module.exports = function(it) {
-            return "object" == typeof it ? null !== it : "function" == typeof it;
-        };
-    }, function(module, exports) {
-        var global = module.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();
-        "number" == typeof __g && (__g = global);
-    }, function(module, exports) {
-        var core = module.exports = {
-            version: "2.5.5"
-        };
-        "number" == typeof __e && (__e = core);
-    }, function(module, exports, __webpack_require__) {
-        var anObject = __webpack_require__(29), IE8_DOM_DEFINE = __webpack_require__(30), toPrimitive = __webpack_require__(32), dP = Object.defineProperty;
-        exports.f = __webpack_require__(15) ? Object.defineProperty : function(O, P, Attributes) {
-            if (anObject(O), P = toPrimitive(P, !0), anObject(Attributes), IE8_DOM_DEFINE) try {
-                return dP(O, P, Attributes);
-            } catch (e) {}
-            if ("get" in Attributes || "set" in Attributes) throw TypeError("Accessors not supported!");
-            return "value" in Attributes && (O[P] = Attributes.value), O;
-        };
-    }, function(module, exports) {
-        module.exports = function(exec) {
-            try {
-                return !!exec();
-            } catch (e) {
-                return !0;
-            }
-        };
-    }, function(module, exports, __webpack_require__) {
-        "use strict";
-        exports.__esModule = !0;
-        var _defineProperty = __webpack_require__(22), _defineProperty2 = function(obj) {
-            return obj && obj.__esModule ? obj : {
-                default: obj
-            };
-        }(_defineProperty);
-        exports.default = function() {
-            function defineProperties(target, props) {
-                for (var i = 0; i < props.length; i++) {
-                    var descriptor = props[i];
-                    descriptor.enumerable = descriptor.enumerable || !1, descriptor.configurable = !0, 
-                    "value" in descriptor && (descriptor.writable = !0), (0, _defineProperty2.default)(target, descriptor.key, descriptor);
-                }
-            }
-            return function(Constructor, protoProps, staticProps) {
-                return protoProps && defineProperties(Constructor.prototype, protoProps), staticProps && defineProperties(Constructor, staticProps), 
-                Constructor;
-            };
-        }();
-    }, function(module, exports, __webpack_require__) {
-        module.exports = {
-            default: __webpack_require__(23),
-            __esModule: !0
-        };
-    }, function(module, exports, __webpack_require__) {
-        __webpack_require__(24);
-        var $Object = __webpack_require__(18).Object;
-        module.exports = function(it, key, desc) {
-            return $Object.defineProperty(it, key, desc);
-        };
-    }, function(module, exports, __webpack_require__) {
-        var $export = __webpack_require__(25);
-        $export($export.S + $export.F * !__webpack_require__(15), "Object", {
-            defineProperty: __webpack_require__(19).f
-        });
-    }, function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(17), core = __webpack_require__(18), ctx = __webpack_require__(26), hide = __webpack_require__(28), has = __webpack_require__(34), $export = function(type, name, source) {
-            var key, own, out, IS_FORCED = type & $export.F, IS_GLOBAL = type & $export.G, IS_STATIC = type & $export.S, IS_PROTO = type & $export.P, IS_BIND = type & $export.B, IS_WRAP = type & $export.W, exports = IS_GLOBAL ? core : core[name] || (core[name] = {}), expProto = exports.prototype, target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {}).prototype;
-            IS_GLOBAL && (source = name);
-            for (key in source) (own = !IS_FORCED && target && void 0 !== target[key]) && has(exports, key) || (out = own ? target[key] : source[key], 
-            exports[key] = IS_GLOBAL && "function" != typeof target[key] ? source[key] : IS_BIND && own ? ctx(out, global) : IS_WRAP && target[key] == out ? function(C) {
-                var F = function(a, b, c) {
-                    if (this instanceof C) {
-                        switch (arguments.length) {
-                          case 0:
-                            return new C();
-
-                          case 1:
-                            return new C(a);
-
-                          case 2:
-                            return new C(a, b);
-                        }
-                        return new C(a, b, c);
-                    }
-                    return C.apply(this, arguments);
-                };
-                return F.prototype = C.prototype, F;
-            }(out) : IS_PROTO && "function" == typeof out ? ctx(Function.call, out) : out, IS_PROTO && ((exports.virtual || (exports.virtual = {}))[key] = out, 
-            type & $export.R && expProto && !expProto[key] && hide(expProto, key, out)));
-        };
-        $export.F = 1, $export.G = 2, $export.S = 4, $export.P = 8, $export.B = 16, $export.W = 32, 
-        $export.U = 64, $export.R = 128, module.exports = $export;
-    }, function(module, exports, __webpack_require__) {
-        var aFunction = __webpack_require__(27);
-        module.exports = function(fn, that, length) {
-            if (aFunction(fn), void 0 === that) return fn;
-            switch (length) {
-              case 1:
-                return function(a) {
-                    return fn.call(that, a);
-                };
-
-              case 2:
-                return function(a, b) {
-                    return fn.call(that, a, b);
-                };
-
-              case 3:
-                return function(a, b, c) {
-                    return fn.call(that, a, b, c);
-                };
-            }
-            return function() {
-                return fn.apply(that, arguments);
-            };
-        };
-    }, function(module, exports) {
-        module.exports = function(it) {
-            if ("function" != typeof it) throw TypeError(it + " is not a function!");
-            return it;
-        };
-    }, function(module, exports, __webpack_require__) {
-        var dP = __webpack_require__(19), createDesc = __webpack_require__(33);
-        module.exports = __webpack_require__(15) ? function(object, key, value) {
-            return dP.f(object, key, createDesc(1, value));
-        } : function(object, key, value) {
-            return object[key] = value, object;
-        };
-    }, function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(16);
-        module.exports = function(it) {
-            if (!isObject(it)) throw TypeError(it + " is not an object!");
-            return it;
-        };
-    }, function(module, exports, __webpack_require__) {
-        module.exports = !__webpack_require__(15) && !__webpack_require__(20)(function() {
-            return 7 != Object.defineProperty(__webpack_require__(31)("div"), "a", {
-                get: function() {
-                    return 7;
-                }
-            }).a;
-        });
-    }, function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(16), document = __webpack_require__(17).document, is = isObject(document) && isObject(document.createElement);
-        module.exports = function(it) {
-            return is ? document.createElement(it) : {};
-        };
-    }, function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(16);
-        module.exports = function(it, S) {
-            if (!isObject(it)) return it;
-            var fn, val;
-            if (S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
-            if ("function" == typeof (fn = it.valueOf) && !isObject(val = fn.call(it))) return val;
-            if (!S && "function" == typeof (fn = it.toString) && !isObject(val = fn.call(it))) return val;
-            throw TypeError("Can't convert object to primitive value");
-        };
-    }, function(module, exports) {
-        module.exports = function(bitmap, value) {
-            return {
-                enumerable: !(1 & bitmap),
-                configurable: !(2 & bitmap),
-                writable: !(4 & bitmap),
-                value: value
-            };
-        };
-    }, function(module, exports) {
-        var hasOwnProperty = {}.hasOwnProperty;
-        module.exports = function(it, key) {
-            return hasOwnProperty.call(it, key);
-        };
-    }, function(module, exports, __webpack_require__) {
-        var IObject = __webpack_require__(36), defined = __webpack_require__(37);
-        module.exports = function(it) {
-            return IObject(defined(it));
-        };
-    }, function(module, exports, __webpack_require__) {
-        var cof = __webpack_require__(45);
-        module.exports = Object("z").propertyIsEnumerable(0) ? Object : function(it) {
-            return "String" == cof(it) ? it.split("") : Object(it);
-        };
-    }, function(module, exports) {
-        module.exports = function(it) {
-            if (void 0 == it) throw TypeError("Can't call method on  " + it);
-            return it;
-        };
-    }, function(module, exports) {
-        var ceil = Math.ceil, floor = Math.floor;
-        module.exports = function(it) {
-            return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-        };
-    }, function(module, exports, __webpack_require__) {
-        module.exports = {
-            default: __webpack_require__(40),
-            __esModule: !0
-        };
-    }, function(module, exports, __webpack_require__) {
-        __webpack_require__(41), module.exports = __webpack_require__(18).Object.assign;
-    }, function(module, exports, __webpack_require__) {
-        var $export = __webpack_require__(25);
-        $export($export.S + $export.F, "Object", {
-            assign: __webpack_require__(42)
-        });
-    }, function(module, exports, __webpack_require__) {
-        "use strict";
-        var getKeys = __webpack_require__(43), gOPS = __webpack_require__(53), pIE = __webpack_require__(54), toObject = __webpack_require__(55), IObject = __webpack_require__(36), $assign = Object.assign;
-        module.exports = !$assign || __webpack_require__(20)(function() {
-            var A = {}, B = {}, S = Symbol(), K = "abcdefghijklmnopqrst";
-            return A[S] = 7, K.split("").forEach(function(k) {
-                B[k] = k;
-            }), 7 != $assign({}, A)[S] || Object.keys($assign({}, B)).join("") != K;
-        }) ? function(target, source) {
-            for (var T = toObject(target), aLen = arguments.length, index = 1, getSymbols = gOPS.f, isEnum = pIE.f; aLen > index; ) for (var key, S = IObject(arguments[index++]), keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S), length = keys.length, j = 0; length > j; ) isEnum.call(S, key = keys[j++]) && (T[key] = S[key]);
-            return T;
-        } : $assign;
-    }, function(module, exports, __webpack_require__) {
-        var $keys = __webpack_require__(44), enumBugKeys = __webpack_require__(52);
-        module.exports = Object.keys || function(O) {
-            return $keys(O, enumBugKeys);
-        };
-    }, function(module, exports, __webpack_require__) {
-        var has = __webpack_require__(34), toIObject = __webpack_require__(35), arrayIndexOf = __webpack_require__(46)(!1), IE_PROTO = __webpack_require__(49)("IE_PROTO");
-        module.exports = function(object, names) {
-            var key, O = toIObject(object), i = 0, result = [];
-            for (key in O) key != IE_PROTO && has(O, key) && result.push(key);
-            for (;names.length > i; ) has(O, key = names[i++]) && (~arrayIndexOf(result, key) || result.push(key));
-            return result;
-        };
-    }, function(module, exports) {
-        var toString = {}.toString;
-        module.exports = function(it) {
-            return toString.call(it).slice(8, -1);
-        };
-    }, function(module, exports, __webpack_require__) {
-        var toIObject = __webpack_require__(35), toLength = __webpack_require__(47), toAbsoluteIndex = __webpack_require__(48);
-        module.exports = function(IS_INCLUDES) {
-            return function($this, el, fromIndex) {
-                var value, O = toIObject($this), length = toLength(O.length), index = toAbsoluteIndex(fromIndex, length);
-                if (IS_INCLUDES && el != el) {
-                    for (;length > index; ) if ((value = O[index++]) != value) return !0;
-                } else for (;length > index; index++) if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
-                return !IS_INCLUDES && -1;
-            };
-        };
-    }, function(module, exports, __webpack_require__) {
-        var toInteger = __webpack_require__(38), min = Math.min;
-        module.exports = function(it) {
-            return it > 0 ? min(toInteger(it), 9007199254740991) : 0;
-        };
-    }, function(module, exports, __webpack_require__) {
-        var toInteger = __webpack_require__(38), max = Math.max, min = Math.min;
-        module.exports = function(index, length) {
-            return index = toInteger(index), index < 0 ? max(index + length, 0) : min(index, length);
-        };
-    }, function(module, exports, __webpack_require__) {
-        var shared = __webpack_require__(50)("keys"), uid = __webpack_require__(51);
-        module.exports = function(key) {
-            return shared[key] || (shared[key] = uid(key));
-        };
-    }, function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(17), store = global["__core-js_shared__"] || (global["__core-js_shared__"] = {});
-        module.exports = function(key) {
-            return store[key] || (store[key] = {});
-        };
-    }, function(module, exports) {
-        var id = 0, px = Math.random();
-        module.exports = function(key) {
-            return "Symbol(".concat(void 0 === key ? "" : key, ")_", (++id + px).toString(36));
-        };
-    }, function(module, exports) {
-        module.exports = "constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf".split(",");
-    }, function(module, exports) {
-        exports.f = Object.getOwnPropertySymbols;
-    }, function(module, exports) {
-        exports.f = {}.propertyIsEnumerable;
-    }, function(module, exports, __webpack_require__) {
-        var defined = __webpack_require__(37);
-        module.exports = function(it) {
-            return Object(defined(it));
-        };
     } ]);
 });

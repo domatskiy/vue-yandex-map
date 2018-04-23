@@ -13,7 +13,8 @@
         <br>
         dragable: true<br>
         scrollZoom: true<br>
-        <yandex-map @created="mapCreated2"></yandex-map>
+        <button @click="showMap = !showMap">show Map</button>
+        <yandex-map @created="mapCreated2" v-if="showMap === true"></yandex-map>
 
 
     </div>
@@ -34,7 +35,7 @@
       },
       data () {
         return {
-
+          showMap: false
         }
       },
       created () {
