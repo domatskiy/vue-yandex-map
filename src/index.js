@@ -21,7 +21,7 @@ const YandexMapPlugin = {
     // console.log('install, merge options', Vue.yandexMapOptions)
     const $yandexmap = new yandexMap (Vue.yandexMapOptions)
     VueInstance.prototype.$yandexmap = $yandexmap
-    VueInstance.component('yandex-map', require('./YandexMapContainer.vue'))
+    VueInstance.component('yandex-map', require('./Components/YandexMapContainer.vue'))
   }
 }
 
