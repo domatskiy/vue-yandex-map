@@ -1,5 +1,8 @@
 <template>
-    <div :id="mapId" :style="style" :class="mapClass"></div>
+    <div :class="mapClass">
+        <slot></slot>
+        <div :id="mapId" :style="style" :class="mapClass + '__container'"></div>
+    </div>
 </template>
 <script>
 import YandexMapBus from './../yandex-map-bus'
