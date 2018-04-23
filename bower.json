@@ -1,0 +1,19 @@
+{
+    "name": "vue-yandex-map",
+    "version": "0.5.0",
+    "main": [
+		"./src/index.js"
+	],
+    "ignore": [
+        "test",
+        "node_modules",
+        ".gitignore",
+        "bower.json",
+        "gulpfile.js",
+        "package.json"
+    ],
+    "dependencies": {
+        "angular": ">=1.5.8"
+    },
+    "homepage": "https://github.com/domatskiy/angular-yandex.metrika"
+}
