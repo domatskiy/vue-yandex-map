@@ -12,7 +12,7 @@ const YandexMapBus = new Vue({
   },
   created: function () {
     var yandexMapScript = document.createElement('SCRIPT')
-    yandexMapScript.setAttribute('src', 'https://api-maps.yandex.ru/' + Vue.yandexMapOptions.version + '/?lang=' + Vue.yandexMapOptions.lang)
+    yandexMapScript.setAttribute('src', '//api-maps.yandex.ru/' + Vue.yandexMapOptions.version + '/?lang=' + Vue.yandexMapOptions.lang)
     yandexMapScript.setAttribute('async', '')
     yandexMapScript.setAttribute('defer', '')
 

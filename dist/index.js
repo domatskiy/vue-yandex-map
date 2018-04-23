@@ -29,7 +29,7 @@
             return __webpack_require__.d(getter, "a", getter), getter;
         }, __webpack_require__.o = function(object, property) {
             return Object.prototype.hasOwnProperty.call(object, property);
-        }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 15);
+        }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 18);
     }([ function(module, exports, __webpack_require__) {
         module.exports = !__webpack_require__(4)(function() {
             return 7 != Object.defineProperty({}, "a", {
@@ -70,7 +70,7 @@
         }
         module.exports = g;
     }, function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(1), core = __webpack_require__(2), ctx = __webpack_require__(19), hide = __webpack_require__(21), has = __webpack_require__(8), $export = function(type, name, source) {
+        var global = __webpack_require__(1), core = __webpack_require__(2), ctx = __webpack_require__(22), hide = __webpack_require__(24), has = __webpack_require__(8), $export = function(type, name, source) {
             var key, own, out, IS_FORCED = type & $export.F, IS_GLOBAL = type & $export.G, IS_STATIC = type & $export.S, IS_PROTO = type & $export.P, IS_BIND = type & $export.B, IS_WRAP = type & $export.W, exports = IS_GLOBAL ? core : core[name] || (core[name] = {}), expProto = exports.prototype, target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {}).prototype;
             IS_GLOBAL && (source = name);
             for (key in source) (own = !IS_FORCED && target && void 0 !== target[key]) && has(exports, key) || (out = own ? target[key] : source[key], 
@@ -98,7 +98,7 @@
         $export.F = 1, $export.G = 2, $export.S = 4, $export.P = 8, $export.B = 16, $export.W = 32, 
         $export.U = 64, $export.R = 128, module.exports = $export;
     }, function(module, exports, __webpack_require__) {
-        var anObject = __webpack_require__(22), IE8_DOM_DEFINE = __webpack_require__(23), toPrimitive = __webpack_require__(25), dP = Object.defineProperty;
+        var anObject = __webpack_require__(25), IE8_DOM_DEFINE = __webpack_require__(26), toPrimitive = __webpack_require__(28), dP = Object.defineProperty;
         exports.f = __webpack_require__(0) ? Object.defineProperty : function(O, P, Attributes) {
             if (anObject(O), P = toPrimitive(P, !0), anObject(Attributes), IE8_DOM_DEFINE) try {
                 return dP(O, P, Attributes);
@@ -117,7 +117,7 @@
             return IObject(defined(it));
         };
     }, function(module, exports, __webpack_require__) {
-        var cof = __webpack_require__(30);
+        var cof = __webpack_require__(33);
         module.exports = Object("z").propertyIsEnumerable(0) ? Object : function(it) {
             return "String" == cof(it) ? it.split("") : Object(it);
         };
@@ -2580,17 +2580,18 @@
             }, inBrowser && setTimeout(function() {
                 config.devtools && devtools && devtools.emit("init", Vue);
             }, 0), __webpack_exports__.a = Vue;
-        }).call(__webpack_exports__, __webpack_require__(5), __webpack_require__(46).setImmediate);
+        }).call(__webpack_exports__, __webpack_require__(5), __webpack_require__(49).setImmediate);
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(50);
+        var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(15);
         __webpack_exports__.a = {
             name: "yandexMap",
             data: function() {
                 return {
+                    map: null,
                     YandexMapBus: __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a,
                     mapId: "yandex-map-" + Math.round(1e6 * Math.random()),
-                    style: this.ymapClass ? "" : "width: 100%; height: 100%;",
+                    style: this.ymapClass ? "" : "width: 100%; height: 100%; min-height: 10px",
                     mapClass: "yandex-map"
                 };
             },
@@ -2632,15 +2633,18 @@
                 }
             },
             methods: {
+                getMap: function() {
+                    return this.map;
+                },
                 init: function() {
-                    var center = this.center ? this.center : [ 55.753215, 37.622504 ], $map = new window.ymaps.Map(this.mapId, {
+                    var center = this.center ? this.center : [ 55.753215, 37.622504 ];
+                    this.map = new window.ymaps.Map(this.mapId, {
                         center: center,
                         zoom: this.zoom,
                         controls: this.controls,
                         type: "yandex#map"
-                    }, {});
-                    this.dragable || $map.behaviors.disable("drag"), this.scrollZoom || $map.behaviors.disable("scrollZoom"), 
-                    this.$emit("created", $map);
+                    }, {}), this.dragable || this.map.behaviors.disable("drag"), this.scrollZoom || this.map.behaviors.disable("scrollZoom"), 
+                    this.$emit("created", this.map);
                 }
             },
             created: function() {},
@@ -2656,10 +2660,183 @@
         };
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
+        var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(13), YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue__.a({
+            options: {},
+            data: function() {
+                return {
+                    options: this.options,
+                    events: {},
+                    ymapReady: !1,
+                    scriptAttached: !1
+                };
+            },
+            created: function() {
+                var _this = this, yandexMapScript = document.createElement("SCRIPT");
+                yandexMapScript.setAttribute("src", "//api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang), 
+                yandexMapScript.setAttribute("async", ""), yandexMapScript.setAttribute("defer", ""), 
+                document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached"), 
+                yandexMapScript.onload = function() {
+                    _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
+                        _this.ymapReady = !0, _this.$emit("yandexmap-ready");
+                    });
+                }, this.$watch(function() {
+                    return __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions;
+                }, function(newVal, oldVal) {
+                    console.info("1111111111111111111111111111");
+                }, {
+                    deep: !0
+                });
+            },
+            methods: {
+                init: function(options) {
+                    console.log("init ========", options);
+                },
+                isReady: function() {
+                    return this.ymapReady;
+                }
+            }
+        });
+        __webpack_exports__.a = YandexMapBus;
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
+            scriptExports = scriptExports || {};
+            var type = typeof scriptExports.default;
+            "object" !== type && "function" !== type || (scriptExports = scriptExports.default);
+            var options = "function" == typeof scriptExports ? scriptExports.options : scriptExports;
+            render && (options.render = render, options.staticRenderFns = staticRenderFns, options._compiled = !0), 
+            functionalTemplate && (options.functional = !0), scopeId && (options._scopeId = scopeId);
+            var hook;
+            if (moduleIdentifier ? (hook = function(context) {
+                context = context || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext, 
+                context || "undefined" == typeof __VUE_SSR_CONTEXT__ || (context = __VUE_SSR_CONTEXT__), 
+                injectStyles && injectStyles.call(this, context), context && context._registeredComponents && context._registeredComponents.add(moduleIdentifier);
+            }, options._ssrRegister = hook) : injectStyles && (hook = shadowMode ? function() {
+                injectStyles.call(this, this.$root.$options.shadowRoot);
+            } : injectStyles), hook) if (options.functional) {
+                options._injectStyles = hook;
+                var originalRender = options.render;
+                options.render = function(h, context) {
+                    return hook.call(context), originalRender(h, context);
+                };
+            } else {
+                var existing = options.beforeCreate;
+                options.beforeCreate = existing ? [].concat(existing, hook) : [ hook ];
+            }
+            return {
+                exports: scriptExports,
+                options: options
+            };
+        }
+        __webpack_exports__.a = normalizeComponent;
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(15);
+        __webpack_exports__.a = {
+            name: "RegionSelect",
+            data: function() {
+                return {
+                    map: null,
+                    drag: !1,
+                    selected: !1,
+                    mapInit: !1,
+                    dragger: null,
+                    dragger_polygon: null,
+                    dragger_polyline: null
+                };
+            },
+            props: {
+                region: {
+                    type: Array,
+                    required: !1,
+                    default: function() {
+                        return [];
+                    }
+                }
+            },
+            methods: {
+                buttonClick: function(e) {
+                    e.preventDefault(), e.stopPropagation(), !1 === this.selected && !1 === this.drag ? this.initDragger() : !1 === this.selected && !0 === this.drag ? this.stopDragger() : !0 === this.selected && this.removeDragger();
+                },
+                init: function($map) {
+                    this.map = $map, Array.isArray(this.region) && this.region.length > 0 && (this.dragger_polygon = new ymaps.Polygon([ this.region.slice() ], {
+                        hintContent: ""
+                    }, {
+                        fillColor: "#6699ff",
+                        interactivityModel: "default#transparent",
+                        strokeWidth: 1,
+                        opacity: .2
+                    }), this.selected = !0, this.map.geoObjects.add(this.dragger_polygon), this.$emit("changed", this.region));
+                },
+                stopDragger: function() {
+                    this.dragger.events.group().removeAll(), this.drag = !1;
+                },
+                initDragger: function() {
+                    if (!this.map) return console.warn("yandexmap: map not ready"), null;
+                    var vm = this;
+                    this.drag = !0;
+                    var cursor = this.map.cursors.push("crosshair");
+                    this.map.behaviors.disable("drag"), this.map.events.add("mousedown", function(e) {
+                        var coordinates = [ vm.convert(e.get("position")) ], listeners = vm.dragger.events.group();
+                        listeners.add("move", function(e) {
+                            coordinates.push(vm.convert(e.get("position"))), vm.dragger_polyline ? vm.dragger_polyline.geometry.setCoordinates(coordinates.slice()) : (vm.dragger_polyline = new ymaps.Polyline(coordinates.slice(), {}, {
+                                strokeColor: "#e4300e",
+                                strokeWidth: 2,
+                                strokeStyle: "0 0"
+                            }), vm.map.geoObjects.add(vm.dragger_polyline));
+                        }).add("stop", function(e) {
+                            console.log("map stop event"), vm.drag = !1, cursor.remove(), vm.map.behaviors.enable("drag"), 
+                            vm.dragger_polyline && (vm.map.geoObjects.remove(vm.dragger_polyline), vm.dragger_polyline = null), 
+                            coordinates.length > 2 ? (vm.dragger_polygon && vm.map.geoObjects.remove(vm.dragger_polygon), 
+                            vm.dragger_polygon = new ymaps.Polygon([ coordinates.slice() ], {
+                                hintContent: ""
+                            }, {
+                                fillColor: "#6699ff",
+                                interactivityModel: "default#transparent",
+                                strokeWidth: 1,
+                                opacity: .2
+                            }), vm.map.geoObjects.add(vm.dragger_polygon), vm.$emit("changed", coordinates, vm.dragger_polygon), 
+                            vm.selected = !0) : (vm.selected = !1, vm.$emit("changed", [], vm.dragger_polygon)), 
+                            listeners.removeAll();
+                        }), this.dragger.start(e);
+                    }.bind(this));
+                },
+                removeDragger: function() {
+                    if (!this.map) return console.warn("yandexmap: map not ready"), null;
+                    this.map.behaviors.enable("drag"), this.map.events.remove("mousedown"), this.map.geoObjects.remove(this.dragger_polyline), 
+                    this.map.geoObjects.remove(this.dragger_polygon), this.map.cursors.push("crosshair").remove(), 
+                    this.dragger_polyline = null, this.dragger_polygon = null, this.$emit("changed", []), 
+                    this.drag = !1, this.selected = !1;
+                },
+                convert: function(position) {
+                    return this.map ? this.map.options.get("projection").fromGlobalPixels(this.map.converter.pageToGlobal(position), this.map.getZoom()) : (console.warn("yandexmap: map not ready"), 
+                    []);
+                }
+            },
+            mounted: function() {
+                var _this = this;
+                __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a.ymapReady && (this.dragger = new ymaps.util.Dragger(), 
+                this.mapInit = !0), __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a.$on("yandexmap-ready", function() {
+                    _this.dragger = new ymaps.util.Dragger(), _this.mapInit = !0;
+                }), this.$parent.$on("created", function($map) {
+                    _this.init($map);
+                });
+            },
+            computed: {
+                buttonText: function() {
+                    return !0 === this.drag ? "Отмена" : !0 === this.selected ? "Очистить" : "Выделить";
+                },
+                buttonClass: function() {
+                    return !0 === this.drag ? "processing" : !0 === this.selected ? "active" : "Выделить";
+                }
+            }
+        };
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         });
-        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(16), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(41), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(42), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(13), yandexMap = function() {
+        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(19), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(44), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(45), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(13), yandexMap = function() {
             function yandexMap(options) {
                 __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, yandexMap);
             }
@@ -2677,24 +2854,25 @@
                     lang: "ru_RU"
                 }, options), __WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions = opts;
                 var $yandexmap = new yandexMap(__WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions);
-                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(49));
+                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(52)), 
+                VueInstance.component("region-select", __webpack_require__(54));
             }
         };
         "undefined" != typeof window && window.Vue && window.Vue.use(YandexMapPlugin), __webpack_exports__.default = YandexMapPlugin;
     }, function(module, exports, __webpack_require__) {
         module.exports = {
-            default: __webpack_require__(17),
+            default: __webpack_require__(20),
             __esModule: !0
         };
     }, function(module, exports, __webpack_require__) {
-        __webpack_require__(18), module.exports = __webpack_require__(2).Object.assign;
+        __webpack_require__(21), module.exports = __webpack_require__(2).Object.assign;
     }, function(module, exports, __webpack_require__) {
         var $export = __webpack_require__(6);
         $export($export.S + $export.F, "Object", {
-            assign: __webpack_require__(27)
+            assign: __webpack_require__(30)
         });
     }, function(module, exports, __webpack_require__) {
-        var aFunction = __webpack_require__(20);
+        var aFunction = __webpack_require__(23);
         module.exports = function(fn, that, length) {
             if (aFunction(fn), void 0 === that) return fn;
             switch (length) {
@@ -2723,7 +2901,7 @@
             return it;
         };
     }, function(module, exports, __webpack_require__) {
-        var dP = __webpack_require__(7), createDesc = __webpack_require__(26);
+        var dP = __webpack_require__(7), createDesc = __webpack_require__(29);
         module.exports = __webpack_require__(0) ? function(object, key, value) {
             return dP.f(object, key, createDesc(1, value));
         } : function(object, key, value) {
@@ -2737,7 +2915,7 @@
         };
     }, function(module, exports, __webpack_require__) {
         module.exports = !__webpack_require__(0) && !__webpack_require__(4)(function() {
-            return 7 != Object.defineProperty(__webpack_require__(24)("div"), "a", {
+            return 7 != Object.defineProperty(__webpack_require__(27)("div"), "a", {
                 get: function() {
                     return 7;
                 }
@@ -2769,7 +2947,7 @@
         };
     }, function(module, exports, __webpack_require__) {
         "use strict";
-        var getKeys = __webpack_require__(28), gOPS = __webpack_require__(38), pIE = __webpack_require__(39), toObject = __webpack_require__(40), IObject = __webpack_require__(10), $assign = Object.assign;
+        var getKeys = __webpack_require__(31), gOPS = __webpack_require__(41), pIE = __webpack_require__(42), toObject = __webpack_require__(43), IObject = __webpack_require__(10), $assign = Object.assign;
         module.exports = !$assign || __webpack_require__(4)(function() {
             var A = {}, B = {}, S = Symbol(), K = "abcdefghijklmnopqrst";
             return A[S] = 7, K.split("").forEach(function(k) {
@@ -2780,12 +2958,12 @@
             return T;
         } : $assign;
     }, function(module, exports, __webpack_require__) {
-        var $keys = __webpack_require__(29), enumBugKeys = __webpack_require__(37);
+        var $keys = __webpack_require__(32), enumBugKeys = __webpack_require__(40);
         module.exports = Object.keys || function(O) {
             return $keys(O, enumBugKeys);
         };
     }, function(module, exports, __webpack_require__) {
-        var has = __webpack_require__(8), toIObject = __webpack_require__(9), arrayIndexOf = __webpack_require__(31)(!1), IE_PROTO = __webpack_require__(34)("IE_PROTO");
+        var has = __webpack_require__(8), toIObject = __webpack_require__(9), arrayIndexOf = __webpack_require__(34)(!1), IE_PROTO = __webpack_require__(37)("IE_PROTO");
         module.exports = function(object, names) {
             var key, O = toIObject(object), i = 0, result = [];
             for (key in O) key != IE_PROTO && has(O, key) && result.push(key);
@@ -2798,7 +2976,7 @@
             return toString.call(it).slice(8, -1);
         };
     }, function(module, exports, __webpack_require__) {
-        var toIObject = __webpack_require__(9), toLength = __webpack_require__(32), toAbsoluteIndex = __webpack_require__(33);
+        var toIObject = __webpack_require__(9), toLength = __webpack_require__(35), toAbsoluteIndex = __webpack_require__(36);
         module.exports = function(IS_INCLUDES) {
             return function($this, el, fromIndex) {
                 var value, O = toIObject($this), length = toLength(O.length), index = toAbsoluteIndex(fromIndex, length);
@@ -2819,7 +2997,7 @@
             return index = toInteger(index), index < 0 ? max(index + length, 0) : min(index, length);
         };
     }, function(module, exports, __webpack_require__) {
-        var shared = __webpack_require__(35)("keys"), uid = __webpack_require__(36);
+        var shared = __webpack_require__(38)("keys"), uid = __webpack_require__(39);
         module.exports = function(key) {
             return shared[key] || (shared[key] = uid(key));
         };
@@ -2852,7 +3030,7 @@
     }, function(module, exports, __webpack_require__) {
         "use strict";
         exports.__esModule = !0;
-        var _defineProperty = __webpack_require__(43), _defineProperty2 = function(obj) {
+        var _defineProperty = __webpack_require__(46), _defineProperty2 = function(obj) {
             return obj && obj.__esModule ? obj : {
                 default: obj
             };
@@ -2872,11 +3050,11 @@
         }();
     }, function(module, exports, __webpack_require__) {
         module.exports = {
-            default: __webpack_require__(44),
+            default: __webpack_require__(47),
             __esModule: !0
         };
     }, function(module, exports, __webpack_require__) {
-        __webpack_require__(45);
+        __webpack_require__(48);
         var $Object = __webpack_require__(2).Object;
         module.exports = function(it, key, desc) {
             return $Object.defineProperty(it, key, desc);
@@ -2910,7 +3088,7 @@
                 msecs >= 0 && (item._idleTimeoutId = setTimeout(function() {
                     item._onTimeout && item._onTimeout();
                 }, msecs));
-            }, __webpack_require__(47), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
+            }, __webpack_require__(50), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
             exports.clearImmediate = "undefined" != typeof self && self.clearImmediate || void 0 !== global && global.clearImmediate || this && this.clearImmediate;
         }).call(exports, __webpack_require__(5));
     }, function(module, exports, __webpack_require__) {
@@ -3011,7 +3189,7 @@
                     }(), attachTo.setImmediate = setImmediate, attachTo.clearImmediate = clearImmediate;
                 }
             }("undefined" == typeof self ? void 0 === global ? this : global : self);
-        }).call(exports, __webpack_require__(5), __webpack_require__(48));
+        }).call(exports, __webpack_require__(5), __webpack_require__(51));
     }, function(module, exports) {
         function defaultSetTimout() {
             throw new Error("setTimeout has not been defined");
@@ -3106,47 +3284,8 @@
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         });
-        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(51), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(52), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
+        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(53), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
         Component.options.__file = "src\\Components\\YandexMapContainer.vue", __webpack_exports__.default = Component.exports;
-    }, function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(13), YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue__.a({
-            options: {},
-            data: function() {
-                return {
-                    options: this.options,
-                    events: {},
-                    ymapReady: !1,
-                    scriptAttached: !1
-                };
-            },
-            created: function() {
-                var _this = this, yandexMapScript = document.createElement("SCRIPT");
-                yandexMapScript.setAttribute("src", "https://api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang), 
-                yandexMapScript.setAttribute("async", ""), yandexMapScript.setAttribute("defer", ""), 
-                document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached"), 
-                yandexMapScript.onload = function() {
-                    _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
-                        _this.ymapReady = !0, _this.$emit("yandexmap-ready");
-                    });
-                }, this.$watch(function() {
-                    return __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions;
-                }, function(newVal, oldVal) {
-                    console.info("1111111111111111111111111111");
-                }, {
-                    deep: !0
-                });
-            },
-            methods: {
-                init: function(options) {
-                    console.log("init ========", options);
-                },
-                isReady: function() {
-                    return this.ymapReady;
-                }
-            }
-        });
-        __webpack_exports__.a = YandexMapBus;
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         __webpack_require__.d(__webpack_exports__, "a", function() {
@@ -3155,47 +3294,197 @@
             return staticRenderFns;
         });
         var render = function() {
-            var _vm = this, _h = _vm.$createElement;
-            return (_vm._self._c || _h)("div", {
-                class: _vm.mapClass,
+            var _vm = this, _h = _vm.$createElement, _c = _vm._self._c || _h;
+            return _c("div", {
+                class: _vm.mapClass
+            }, [ _vm._t("default"), _vm._v(" "), _c("div", {
+                class: _vm.mapClass + "__container",
                 style: _vm.style,
                 attrs: {
                     id: _vm.mapId
                 }
-            });
+            }) ], 2);
         }, staticRenderFns = [];
         render._withStripped = !0;
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
-            scriptExports = scriptExports || {};
-            var type = typeof scriptExports.default;
-            "object" !== type && "function" !== type || (scriptExports = scriptExports.default);
-            var options = "function" == typeof scriptExports ? scriptExports.options : scriptExports;
-            render && (options.render = render, options.staticRenderFns = staticRenderFns, options._compiled = !0), 
-            functionalTemplate && (options.functional = !0), scopeId && (options._scopeId = scopeId);
-            var hook;
-            if (moduleIdentifier ? (hook = function(context) {
-                context = context || this.$vnode && this.$vnode.ssrContext || this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext, 
-                context || "undefined" == typeof __VUE_SSR_CONTEXT__ || (context = __VUE_SSR_CONTEXT__), 
-                injectStyles && injectStyles.call(this, context), context && context._registeredComponents && context._registeredComponents.add(moduleIdentifier);
-            }, options._ssrRegister = hook) : injectStyles && (hook = shadowMode ? function() {
-                injectStyles.call(this, this.$root.$options.shadowRoot);
-            } : injectStyles), hook) if (options.functional) {
-                options._injectStyles = hook;
-                var originalRender = options.render;
-                options.render = function(h, context) {
-                    return hook.call(context), originalRender(h, context);
-                };
-            } else {
-                var existing = options.beforeCreate;
-                options.beforeCreate = existing ? [].concat(existing, hook) : [ hook ];
+        function injectStyle(context) {
+            disposed || __webpack_require__(55);
+        }
+        Object.defineProperty(__webpack_exports__, "__esModule", {
+            value: !0
+        });
+        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__ = __webpack_require__(17), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__ = __webpack_require__(60), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), disposed = !1, __vue_styles__ = injectStyle, Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.b, !1, __vue_styles__, null, null);
+        Component.options.__file = "src\\Components\\RegionSelect.vue", __webpack_exports__.default = Component.exports;
+    }, function(module, exports, __webpack_require__) {
+        var content = __webpack_require__(56);
+        "string" == typeof content && (content = [ [ module.i, content, "" ] ]), content.locals && (module.exports = content.locals);
+        var add = __webpack_require__(58).default;
+        add("f284a574", content, !1, {});
+    }, function(module, exports, __webpack_require__) {
+        exports = module.exports = __webpack_require__(57)(!1), exports.push([ module.i, "\n.yandex-map_region {\n  position: relative;\n  text-align: right;\n}\n.yandex-map_region a {\n  z-index: 120;\n  display: inline-block;\n  position: absolute;\n  padding: 4px 10px;\n  top: 10px;\n  right: 10px;\n  background-color: #30b9e8;\n  color: white;\n  cursor: pointer;\n  text-decoration: none;\n}\n.yandex-map_region a.processing {\n  background-color: #7fc54e;\n}\n.yandex-map_region a.active {\n  background-color: #cc242b;\n}\n", "" ]);
+    }, function(module, exports) {
+        function cssWithMappingToString(item, useSourceMap) {
+            var content = item[1] || "", cssMapping = item[3];
+            if (!cssMapping) return content;
+            if (useSourceMap && "function" == typeof btoa) {
+                var sourceMapping = toComment(cssMapping);
+                return [ content ].concat(cssMapping.sources.map(function(source) {
+                    return "/*# sourceURL=" + cssMapping.sourceRoot + source + " */";
+                })).concat([ sourceMapping ]).join("\n");
             }
-            return {
-                exports: scriptExports,
-                options: options
+            return [ content ].join("\n");
+        }
+        function toComment(sourceMap) {
+            return "/*# sourceMappingURL=data:application/json;charset=utf-8;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+        }
+        module.exports = function(useSourceMap) {
+            var list = [];
+            return list.toString = function() {
+                return this.map(function(item) {
+                    var content = cssWithMappingToString(item, useSourceMap);
+                    return item[2] ? "@media " + item[2] + "{" + content + "}" : content;
+                }).join("");
+            }, list.i = function(modules, mediaQuery) {
+                "string" == typeof modules && (modules = [ [ null, modules, "" ] ]);
+                for (var alreadyImportedModules = {}, i = 0; i < this.length; i++) {
+                    var id = this[i][0];
+                    "number" == typeof id && (alreadyImportedModules[id] = !0);
+                }
+                for (i = 0; i < modules.length; i++) {
+                    var item = modules[i];
+                    "number" == typeof item[0] && alreadyImportedModules[item[0]] || (mediaQuery && !item[2] ? item[2] = mediaQuery : mediaQuery && (item[2] = "(" + item[2] + ") and (" + mediaQuery + ")"), 
+                    list.push(item));
+                }
+            }, list;
+        };
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        function addStylesClient(parentId, list, _isProduction, _options) {
+            isProduction = _isProduction, options = _options || {};
+            var styles = Object(__WEBPACK_IMPORTED_MODULE_0__listToStyles__.a)(parentId, list);
+            return addStylesToDom(styles), function(newList) {
+                for (var mayRemove = [], i = 0; i < styles.length; i++) {
+                    var item = styles[i], domStyle = stylesInDom[item.id];
+                    domStyle.refs--, mayRemove.push(domStyle);
+                }
+                newList ? (styles = Object(__WEBPACK_IMPORTED_MODULE_0__listToStyles__.a)(parentId, newList), 
+                addStylesToDom(styles)) : styles = [];
+                for (var i = 0; i < mayRemove.length; i++) {
+                    var domStyle = mayRemove[i];
+                    if (0 === domStyle.refs) {
+                        for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j]();
+                        delete stylesInDom[domStyle.id];
+                    }
+                }
             };
         }
-        __webpack_exports__.a = normalizeComponent;
+        function addStylesToDom(styles) {
+            for (var i = 0; i < styles.length; i++) {
+                var item = styles[i], domStyle = stylesInDom[item.id];
+                if (domStyle) {
+                    domStyle.refs++;
+                    for (var j = 0; j < domStyle.parts.length; j++) domStyle.parts[j](item.parts[j]);
+                    for (;j < item.parts.length; j++) domStyle.parts.push(addStyle(item.parts[j]));
+                    domStyle.parts.length > item.parts.length && (domStyle.parts.length = item.parts.length);
+                } else {
+                    for (var parts = [], j = 0; j < item.parts.length; j++) parts.push(addStyle(item.parts[j]));
+                    stylesInDom[item.id] = {
+                        id: item.id,
+                        refs: 1,
+                        parts: parts
+                    };
+                }
+            }
+        }
+        function createStyleElement() {
+            var styleElement = document.createElement("style");
+            return styleElement.type = "text/css", head.appendChild(styleElement), styleElement;
+        }
+        function addStyle(obj) {
+            var update, remove, styleElement = document.querySelector("style[" + ssrIdKey + '~="' + obj.id + '"]');
+            if (styleElement) {
+                if (isProduction) return noop;
+                styleElement.parentNode.removeChild(styleElement);
+            }
+            if (isOldIE) {
+                var styleIndex = singletonCounter++;
+                styleElement = singletonElement || (singletonElement = createStyleElement()), update = applyToSingletonTag.bind(null, styleElement, styleIndex, !1), 
+                remove = applyToSingletonTag.bind(null, styleElement, styleIndex, !0);
+            } else styleElement = createStyleElement(), update = applyToTag.bind(null, styleElement), 
+            remove = function() {
+                styleElement.parentNode.removeChild(styleElement);
+            };
+            return update(obj), function(newObj) {
+                if (newObj) {
+                    if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) return;
+                    update(obj = newObj);
+                } else remove();
+            };
+        }
+        function applyToSingletonTag(styleElement, index, remove, obj) {
+            var css = remove ? "" : obj.css;
+            if (styleElement.styleSheet) styleElement.styleSheet.cssText = replaceText(index, css); else {
+                var cssNode = document.createTextNode(css), childNodes = styleElement.childNodes;
+                childNodes[index] && styleElement.removeChild(childNodes[index]), childNodes.length ? styleElement.insertBefore(cssNode, childNodes[index]) : styleElement.appendChild(cssNode);
+            }
+        }
+        function applyToTag(styleElement, obj) {
+            var css = obj.css, media = obj.media, sourceMap = obj.sourceMap;
+            if (media && styleElement.setAttribute("media", media), options.ssrId && styleElement.setAttribute(ssrIdKey, obj.id), 
+            sourceMap && (css += "\n/*# sourceURL=" + sourceMap.sources[0] + " */", css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */"), 
+            styleElement.styleSheet) styleElement.styleSheet.cssText = css; else {
+                for (;styleElement.firstChild; ) styleElement.removeChild(styleElement.firstChild);
+                styleElement.appendChild(document.createTextNode(css));
+            }
+        }
+        Object.defineProperty(__webpack_exports__, "__esModule", {
+            value: !0
+        }), __webpack_exports__.default = addStylesClient;
+        var __WEBPACK_IMPORTED_MODULE_0__listToStyles__ = __webpack_require__(59), hasDocument = "undefined" != typeof document;
+        if ("undefined" != typeof DEBUG && DEBUG && !hasDocument) throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");
+        var stylesInDom = {}, head = hasDocument && (document.head || document.getElementsByTagName("head")[0]), singletonElement = null, singletonCounter = 0, isProduction = !1, noop = function() {}, options = null, ssrIdKey = "data-vue-ssr-id", isOldIE = "undefined" != typeof navigator && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase()), replaceText = function() {
+            var textStore = [];
+            return function(index, replacement) {
+                return textStore[index] = replacement, textStore.filter(Boolean).join("\n");
+            };
+        }();
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        function listToStyles(parentId, list) {
+            for (var styles = [], newStyles = {}, i = 0; i < list.length; i++) {
+                var item = list[i], id = item[0], css = item[1], media = item[2], sourceMap = item[3], part = {
+                    id: parentId + ":" + i,
+                    css: css,
+                    media: media,
+                    sourceMap: sourceMap
+                };
+                newStyles[id] ? newStyles[id].parts.push(part) : styles.push(newStyles[id] = {
+                    id: id,
+                    parts: [ part ]
+                });
+            }
+            return styles;
+        }
+        __webpack_exports__.a = listToStyles;
+    }, function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return render;
+        }), __webpack_require__.d(__webpack_exports__, "b", function() {
+            return staticRenderFns;
+        });
+        var render = function() {
+            var _vm = this, _h = _vm.$createElement, _c = _vm._self._c || _h;
+            return !0 !== _vm.map ? _c("div", {
+                staticClass: "yandex-map_region"
+            }, [ _c("a", {
+                class: _vm.buttonClass,
+                on: {
+                    click: _vm.buttonClick
+                }
+            }, [ _vm._v(_vm._s(_vm.buttonText)) ]) ]) : _vm._e();
+        }, staticRenderFns = [];
+        render._withStripped = !0;
     } ]);
 });

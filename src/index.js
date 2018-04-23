@@ -22,6 +22,7 @@ const YandexMapPlugin = {
     const $yandexmap = new yandexMap (Vue.yandexMapOptions)
     VueInstance.prototype.$yandexmap = $yandexmap
     VueInstance.component('yandex-map', require('./Components/YandexMapContainer.vue'))
+    VueInstance.component('region-select', require('./Components/RegionSelect.vue'))
   }
 }
 

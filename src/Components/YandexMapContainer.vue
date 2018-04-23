@@ -6,14 +6,16 @@
 </template>
 <script>
 import YandexMapBus from './../yandex-map-bus'
+// import RegionSelect from './RegionSelect.vue'
 
 export default {
   name: 'yandexMap',
   data () {
     return {
+      map: null,
       YandexMapBus: YandexMapBus,
       mapId: 'yandex-map-' + Math.round(Math.random() * 1000000),
-      style: this.ymapClass ? '' : 'width: 100%; height: 100%;',
+      style: this.ymapClass ? '' : 'width: 100%; height: 100%; min-height: 10px',
       mapClass: 'yandex-map'
     }
   },
@@ -51,11 +53,14 @@ export default {
     }
   },
   methods: {
+    getMap: function () {
+      return this.map
+    },
     init: function () {
       // console.log('on yandexmap-ready')
       let center = this.center ? this.center : [55.753215, 37.622504]
 
-      let $map = new window.ymaps.Map(this.mapId, {
+      this.map = new window.ymaps.Map(this.mapId, {
         center: center,
         zoom: this.zoom,
         controls: this.controls, // 'zoomControl' , 'typeSelector',  'fullscreenControl'
@@ -63,18 +68,18 @@ export default {
       }, {})
 
       if (!this.dragable) {
-        $map.behaviors.disable('drag')
+        this.map.behaviors.disable('drag')
       }
 
       if (!this.scrollZoom) {
-        $map.behaviors.disable('scrollZoom')
+        this.map.behaviors.disable('scrollZoom')
       }
 
-      this.$emit('created', $map)
+      this.$emit('created', this.map)
     }
   },
   created: function () {
-
+    // console.log('$refs', this.$refs)
   },
   mounted: function () {
 
