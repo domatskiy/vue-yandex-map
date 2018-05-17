@@ -11,7 +11,9 @@ npm i vue-yandex-map
     :dragable="false"
     :scrollZoom="false"
     @created="mapCreated">
+    @destroy="mapDestroy">
         <region-select 
+          button-text="Please select ..."
           :region="[[55.761104221485205, 37.589244608215324],[55.753360214866454, 37.519893411926276], [55.74329069752624, 37.57207847052001]]"
           @changed="regionChanged">
         </region-select>
@@ -60,6 +62,9 @@ export default {
           // add points on map
           // ...
         },
+        mapDestroy: function($map) {
+          console.info('mapDestroy')
+        },
         regionChanged: function ($coordinates, $polygon) {
           
           console.info('regionChanged, coord=', $coordinates)
@@ -90,5 +95,32 @@ export default {
       }
     }
 ```
+
+### yandex-map properties
+
+
+| Name   | Type  | Required | Default | Description |
+| ------ |:-----:| :---------:| --------|:---------|
+| center | Array | false     | []       | set map center |
+| zoom | Number | false     | 15       | set map zoom |
+| dragable | Boolean | false | true    | enable drag map |
+| scrollZoom | Boolean | false | true    | enable zoom on scroll |
+
+### yandex-map events
+| Name   | params | Description |
+| ------ |:-----:|:---------|
+| created | map  |  when creating the map |
+| destroy | map  |  when destroy the map |
+
+### region-select properties
+| Name   | Type  | Required | Default | Description |
+| ------ |:-----:| :---------:| --------|:---------|
+| button-text | String | false  |        | set button text |
+| region | Array | false  | []      | set region |
+
+### region-select events
+| Name   | params | Description |
+| ------ |:-----:|:---------|
+| changed |   |  when changing the selection |
 
 https://domatskiy.github.io/vue-yandex-map/
