@@ -96,6 +96,8 @@ export default {
   watch: {
 
   },
-  beforeDestroy () {}
+  beforeDestroy () {
+    this.$emit('destroy', this.map)
+  }
 }
 </script>

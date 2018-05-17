@@ -4,22 +4,31 @@
         zoom: 10<br>
         dragable: false<br>
         scrollZoom: false<br>
-        <yandex-map @created="mapCreated"
+        <yandex-map
+            @created="mapCreated"
             :center="[55.681576, 37.488467]"
             :zoom="10"
             :dragable="false"
             :scrollZoom="false">
             <region-select
-                :region="[[55.761104221485205, 37.589244608215324],[55.753360214866454, 37.519893411926276], [55.74329069752624, 37.57207847052001]]"
+                button-text="Please..."
+                :region="[[55.68933431346611, 37.393709919921854],[55.642761241410994, 37.54477193164061],[55.727327709751215, 37.5392787675781]]"
                 @changed="regionChanged"></region-select>
         </yandex-map>
         <br>
         <br>
         dragable: true<br>
         scrollZoom: true<br>
-        <button @click="showMap = !showMap">show Map</button>
-        <yandex-map @created="mapCreated2" v-if="showMap === true">
-            <region-select @changed="regionChanged"></region-select>
+        <button @click="showMap = !showMap">{{showMap ? 'hide map' : 'show map'}}</button>
+        <yandex-map
+            :zoom="10"
+            @created="mapCreated2"
+            @destroy="mapDestroy2"
+            v-if="showMap === true">
+            <region-select
+                @changed="regionChanged"
+                :region="[[55.68933431346611, 37.393709919921854],[55.642761241410994, 37.54477193164061],[55.727327709751215, 37.5392787675781]]">
+            </region-select>
         </yandex-map>
 
 
@@ -122,8 +131,40 @@
           this.mapObjectManager.add(point)
           this.map.geoObjects.add(this.mapObjectManager)
         },
+        mapDestroy2: function ($map) {
+          console.info('APP: mapDestroy2')
+        },
         mapCreated2: function ($map) {
           console.info('APP: mapCreated2')
+
+            var point = {
+                type: 'Feature',
+                id: 777,
+                //preset: icon_pointer,
+                preset: 'islands#darkGreenDotIcon',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [55.681576, 37.488467]
+                },
+                properties: {
+                    hintContent: 'test point',
+                    balloonContent: 'test'
+                },
+                options: {
+                    // balloonLayout: controller.LayoutClass
+                }
+            }
+
+            this.mapObjectManager = new ymaps.ObjectManager({
+                clusterize: false,
+                gridSize: 60,
+                clusterMinClusterSize: 5,
+                clusterHasBalloon: true, // Опции кластеров задаются с префиксом cluster.
+                geoObjectOpenBalloonOnClick: false // Опции геообъектов задаются с префиксом geoObject
+            })
+
+            this.mapObjectManager.add(point)
+            $map.geoObjects.add(this.mapObjectManager)
         },
         regionChanged: function ($coordinates, $polygon) {
           console.info('APP: regionChanged, coord=', $coordinates)

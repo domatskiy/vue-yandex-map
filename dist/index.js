@@ -2656,7 +2656,9 @@
                 }), this.YandexMapBus.ymapReady && this.init();
             },
             watch: {},
-            beforeDestroy: function() {}
+            beforeDestroy: function() {
+                this.$emit("destroy", this.map);
+            }
         };
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -2752,6 +2754,26 @@
                     default: function() {
                         return [];
                     }
+                },
+                buttonText: {
+                    type: String,
+                    required: !1,
+                    default: "Select region"
+                },
+                buttonSelectedText: {
+                    type: String,
+                    required: !1,
+                    default: "Clear selection"
+                },
+                buttonCancelText: {
+                    type: String,
+                    required: !1,
+                    default: "Cancel"
+                },
+                buttonClass: {
+                    type: String,
+                    required: !1,
+                    default: ""
                 }
             },
             methods: {
@@ -2769,37 +2791,38 @@
                     }), this.selected = !0, this.map.geoObjects.add(this.dragger_polygon), this.$emit("changed", this.region));
                 },
                 stopDragger: function() {
-                    this.dragger.events.group().removeAll(), this.drag = !1;
+                    console.log("stopDragger"), this.dragger.events.group().removeAll(), this.drag = !1;
                 },
                 initDragger: function() {
+                    var _this = this;
                     if (!this.map) return console.warn("yandexmap: map not ready"), null;
                     var vm = this;
                     this.drag = !0;
                     var cursor = this.map.cursors.push("crosshair");
                     this.map.behaviors.disable("drag"), this.map.events.add("mousedown", function(e) {
-                        var coordinates = [ vm.convert(e.get("position")) ], listeners = vm.dragger.events.group();
+                        var coordinates = [ _this.convert(e.get("position")) ], listeners = _this.dragger.events.group();
                         listeners.add("move", function(e) {
-                            coordinates.push(vm.convert(e.get("position"))), vm.dragger_polyline ? vm.dragger_polyline.geometry.setCoordinates(coordinates.slice()) : (vm.dragger_polyline = new ymaps.Polyline(coordinates.slice(), {}, {
+                            coordinates.push(this.convert(e.get("position"))), this.dragger_polyline ? this.dragger_polyline.geometry.setCoordinates(coordinates.slice()) : (this.dragger_polyline = new ymaps.Polyline(coordinates.slice(), {}, {
                                 strokeColor: "#e4300e",
                                 strokeWidth: 2,
                                 strokeStyle: "0 0"
-                            }), vm.map.geoObjects.add(vm.dragger_polyline));
+                            }), this.map.geoObjects.add(vm.dragger_polyline));
                         }).add("stop", function(e) {
-                            console.log("map stop event"), vm.drag = !1, cursor.remove(), vm.map.behaviors.enable("drag"), 
-                            vm.dragger_polyline && (vm.map.geoObjects.remove(vm.dragger_polyline), vm.dragger_polyline = null), 
-                            coordinates.length > 2 ? (vm.dragger_polygon && vm.map.geoObjects.remove(vm.dragger_polygon), 
-                            vm.dragger_polygon = new ymaps.Polygon([ coordinates.slice() ], {
+                            console.log("map stop event"), this.drag = !1, cursor.remove(), this.map.behaviors.enable("drag"), 
+                            vm.dragger_polyline && (this.map.geoObjects.remove(vm.dragger_polyline), this.dragger_polyline = null), 
+                            coordinates.length > 2 ? (this.dragger_polygon && this.map.geoObjects.remove(vm.dragger_polygon), 
+                            this.dragger_polygon = new ymaps.Polygon([ coordinates.slice() ], {
                                 hintContent: ""
                             }, {
                                 fillColor: "#6699ff",
                                 interactivityModel: "default#transparent",
                                 strokeWidth: 1,
                                 opacity: .2
-                            }), vm.map.geoObjects.add(vm.dragger_polygon), vm.$emit("changed", coordinates, vm.dragger_polygon), 
-                            vm.selected = !0) : (vm.selected = !1, vm.$emit("changed", [], vm.dragger_polygon)), 
+                            }), this.map.geoObjects.add(vm.dragger_polygon), this.$emit("changed", coordinates, vm.dragger_polygon), 
+                            this.selected = !0) : (this.selected = !1, this.$emit("changed", [], vm.dragger_polygon)), 
                             listeners.removeAll();
-                        }), this.dragger.start(e);
-                    }.bind(this));
+                        }), _this.dragger.start(e);
+                    });
                 },
                 removeDragger: function() {
                     if (!this.map) return console.warn("yandexmap: map not ready"), null;
@@ -2814,20 +2837,20 @@
                 }
             },
             mounted: function() {
-                var _this = this;
+                var _this2 = this;
                 __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a.ymapReady && (this.dragger = new ymaps.util.Dragger(), 
                 this.mapInit = !0), __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a.$on("yandexmap-ready", function() {
-                    _this.dragger = new ymaps.util.Dragger(), _this.mapInit = !0;
+                    _this2.dragger = new ymaps.util.Dragger(), _this2.mapInit = !0;
                 }), this.$parent.$on("created", function($map) {
-                    _this.init($map);
+                    console.log("map created"), _this2.init($map);
                 });
             },
             computed: {
-                buttonText: function() {
-                    return !0 === this.drag ? "Отмена" : !0 === this.selected ? "Очистить" : "Выделить";
+                computedButtonText: function() {
+                    return !0 === this.drag ? this.buttonCancelText : !0 === this.selected ? this.buttonSelectedText : this.buttonText;
                 },
-                buttonClass: function() {
-                    return !0 === this.drag ? "processing" : !0 === this.selected ? "active" : "Выделить";
+                computedButtonClass: function() {
+                    return [ this.buttonClass, !0 === this.drag ? "processing" : !0 === this.selected ? "active" : "" ];
                 }
             }
         };
@@ -3479,11 +3502,11 @@
             return !0 !== _vm.map ? _c("div", {
                 staticClass: "yandex-map_region"
             }, [ _c("a", {
-                class: _vm.buttonClass,
+                class: _vm.computedButtonClass,
                 on: {
                     click: _vm.buttonClick
                 }
-            }, [ _vm._v(_vm._s(_vm.buttonText)) ]) ]) : _vm._e();
+            }, [ _vm._v(_vm._s(_vm.computedButtonText)) ]) ]) : _vm._e();
         }, staticRenderFns = [];
         render._withStripped = !0;
     } ]);

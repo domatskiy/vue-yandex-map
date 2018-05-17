@@ -1,6 +1,6 @@
 <template>
     <div class="yandex-map_region" v-if="map !== true">
-        <a @click="buttonClick" :class="buttonClass">{{buttonText}}</a>
+        <a @click="buttonClick" :class="computedButtonClass">{{computedButtonText}}</a>
     </div>
 </template>
 <script>
@@ -26,6 +26,26 @@ export default {
       default: function () {
         return []
       }
+    },
+    buttonText: {
+      type: String,
+      required: false,
+      default: 'Select region'
+    },
+    buttonSelectedText: {
+      type: String,
+      required: false,
+      default: 'Clear selection'
+    },
+    buttonCancelText: {
+      type: String,
+      required: false,
+      default: 'Cancel'
+    },
+    buttonClass: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   methods: {
@@ -64,6 +84,8 @@ export default {
       }
     },
     stopDragger: function(){
+      console.log('stopDragger')
+
       let listeners = this.dragger.events.group()
       listeners.removeAll()
       this.drag = false;
@@ -80,49 +102,49 @@ export default {
 
       let cursor = this.map.cursors.push('crosshair')
       this.map.behaviors.disable('drag')
-      this.map.events.add('mousedown', function (e) {
+      this.map.events.add('mousedown', (e) => {
 
-        let coordinates = [vm.convert(e.get('position'))]
-        let listeners = vm.dragger.events.group()
+        let coordinates = [this.convert(e.get('position'))]
+        let listeners = this.dragger.events.group()
 
         listeners.add('move', function (e) {
 
-          coordinates.push(vm.convert(e.get('position')));
+          coordinates.push(this.convert(e.get('position')));
 
-          if (vm.dragger_polyline) {
+          if (this.dragger_polyline) {
             // add coordinates
-            vm.dragger_polyline.geometry.setCoordinates(coordinates.slice())
+            this.dragger_polyline.geometry.setCoordinates(coordinates.slice())
           } else {
             // create poligon
-            vm.dragger_polyline = new ymaps.Polyline(coordinates.slice(),{},{
+            this.dragger_polyline = new ymaps.Polyline(coordinates.slice(),{},{
               strokeColor: '#e4300e',
               strokeWidth: 2,
               strokeStyle: '0 0' // Первой цифрой задаем длину штриха. Второй цифрой задаем длину разрыва.
             })
 
-            vm.map.geoObjects.add(vm.dragger_polyline)
+            this.map.geoObjects.add(vm.dragger_polyline)
           }
         })
         .add('stop', function (e) {
 
           console.log('map stop event');
-          vm.drag = false;
+          this.drag = false;
 
           cursor.remove();
-          vm.map.behaviors.enable('drag');
+          this.map.behaviors.enable('drag');
 
           if (vm.dragger_polyline) {
-            vm.map.geoObjects.remove(vm.dragger_polyline)
-            vm.dragger_polyline = null
+            this.map.geoObjects.remove(vm.dragger_polyline)
+            this.dragger_polyline = null
           }
 
           if (coordinates.length > 2) {
 
-            if (vm.dragger_polygon) {
-              vm.map.geoObjects.remove(vm.dragger_polygon);
+            if (this.dragger_polygon) {
+              this.map.geoObjects.remove(vm.dragger_polygon);
             }
 
-            vm.dragger_polygon = new ymaps.Polygon([coordinates.slice()], {
+            this.dragger_polygon = new ymaps.Polygon([coordinates.slice()], {
               hintContent: ""
             }, {
               fillColor: '#6699ff',
@@ -131,13 +153,13 @@ export default {
               opacity: 0.2
             })
 
-            vm.map.geoObjects.add(vm.dragger_polygon);
-            vm.$emit('changed', coordinates, vm.dragger_polygon)
-            vm.selected = true;
+            this.map.geoObjects.add(vm.dragger_polygon);
+            this.$emit('changed', coordinates, vm.dragger_polygon)
+            this.selected = true;
 
           } else {
-            vm.selected = false;
-            vm.$emit('changed', [], vm.dragger_polygon)
+            this.selected = false;
+            this.$emit('changed', [], vm.dragger_polygon)
           }
 
           listeners.removeAll()
@@ -145,7 +167,7 @@ export default {
         }) // add
 
         this.dragger.start(e)
-      }.bind(this))
+      })
     },
     removeDragger: function () {
 
@@ -198,16 +220,17 @@ export default {
     })
 
     this.$parent.$on('created', ($map) => {
+      console.log('map created')
       this.init($map)
     })
 
   },
   computed: {
-    buttonText: function () {
-      return this.drag === true ? 'Отмена' : (this.selected  === true ? 'Очистить' : 'Выделить')
+    computedButtonText: function () {
+      return this.drag === true ? this.buttonCancelText : (this.selected  === true ? this.buttonSelectedText : this.buttonText)
     },
-    buttonClass: function () {
-      return this.drag === true ? 'processing' : (this.selected  === true ? 'active' : 'Выделить')
+    computedButtonClass: function () {
+      return [this.buttonClass, (this.drag === true ? 'processing' : (this.selected  === true ? 'active' : ''))]
     }
   }
 }
