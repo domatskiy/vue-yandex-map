@@ -96,8 +96,11 @@ export default {
     }
 ```
 
-### yandex-map properties
+## screenshot
+![map with selected region](demo/screenshot/map_region_selected.png)
 
+
+### yandex-map properties
 
 | Name   | Type  | Required | Default | Description |
 | ------ |:-----:| :---------:| --------|:---------|

@@ -107,7 +107,7 @@ export default {
         let coordinates = [this.convert(e.get('position'))]
         let listeners = this.dragger.events.group()
 
-        listeners.add('move', function (e) {
+        listeners.add('move', (e) => {
 
           coordinates.push(this.convert(e.get('position')));
 
@@ -125,15 +125,15 @@ export default {
             this.map.geoObjects.add(vm.dragger_polyline)
           }
         })
-        .add('stop', function (e) {
+        .add('stop', (e) => {
 
-          console.log('map stop event');
+          // console.log('map stop event');
           this.drag = false;
 
           cursor.remove();
           this.map.behaviors.enable('drag');
 
-          if (vm.dragger_polyline) {
+          if (this.dragger_polyline) {
             this.map.geoObjects.remove(vm.dragger_polyline)
             this.dragger_polyline = null
           }
@@ -220,7 +220,7 @@ export default {
     })
 
     this.$parent.$on('created', ($map) => {
-      console.log('map created')
+      // console.log('map created')
       this.init($map)
     })
 
