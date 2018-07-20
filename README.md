@@ -114,6 +114,8 @@ export default {
 | ------ |:-----:|:---------|
 | created | map  |  when creating the map |
 | destroy | map  |  when destroy the map |
+| click | map, position  |  when click on map |
+| boundschange | map, bounds  |  when change bounds |
 
 ### region-select properties
 | Name   | Type  | Required | Default | Description |

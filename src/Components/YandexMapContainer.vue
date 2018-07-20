@@ -75,6 +75,26 @@ export default {
         this.map.behaviors.disable('scrollZoom')
       }
 
+      /*
+      this.map.events.add('actiontick', (e) => {
+        let tick = e.get('tick')
+        let action  = e.get('action')
+        // console.log('Сейчас карта переместится в точку (' + map.options.get('projection').fromGlobalPixels(tick.globalPixelCenter, tick.zoom).join(',') + ') в течение ' + e.get('tick').duration + ' миллисекунд');
+        this.$emit('actiontick', this.map, tick, action)
+      })
+      */
+
+      this.map.events.add('click', (e) => {
+         let position = e.get('coordPosition');
+         this.$emit('click', this.map, position)
+      })
+
+      this.map.events.add('boundschange', (e) => {
+        // Новая область показа карты
+        let newBounds = e.get('newBounds')
+        this.$emit('boundschange', this.map, newBounds)
+      })
+
       this.$emit('created', this.map)
     }
   },
