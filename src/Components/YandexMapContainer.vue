@@ -6,7 +6,6 @@
 </template>
 <script>
 import YandexMapBus from './../yandex-map-bus'
-// import RegionSelect from './RegionSelect.vue'
 
 export default {
   name: 'yandexMap',
@@ -57,7 +56,7 @@ export default {
       return this.map
     },
     init: function () {
-      // console.log('on yandexmap-ready')
+      console.log('on yandexmap-ready')
       let center = this.center ? this.center : [55.753215, 37.622504]
 
       this.map = new window.ymaps.Map(this.mapId, {
@@ -85,8 +84,8 @@ export default {
       */
 
       this.map.events.add('click', (e) => {
-         let position = e.get('coordPosition');
-         this.$emit('click', this.map, position)
+        let position = e.get('coordPosition')
+        this.$emit('click', this.map, position)
       })
 
       this.map.events.add('boundschange', (e) => {
@@ -98,11 +97,8 @@ export default {
       this.$emit('created', this.map)
     }
   },
-  created: function () {
-    // console.log('$refs', this.$refs)
-  },
   mounted: function () {
-
+    this.YandexMapBus.attachScript()
     this.YandexMapBus.$on('yandexmap-attached', () => {})
     this.YandexMapBus.$on('yandexmap-loaded', () => {})
     this.YandexMapBus.$on('yandexmap-ready', () => {

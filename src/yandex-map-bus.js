@@ -10,40 +10,28 @@ const YandexMapBus = new Vue({
       scriptAttached: false
     }
   },
-  created: function () {
-    var yandexMapScript = document.createElement('SCRIPT')
-    yandexMapScript.setAttribute('src', '//api-maps.yandex.ru/' + Vue.yandexMapOptions.version + '/?lang=' + Vue.yandexMapOptions.lang)
-    yandexMapScript.setAttribute('async', '')
-    yandexMapScript.setAttribute('defer', '')
-
-    // let body = window.document.querySelector('body')
-
-    document.body.appendChild(yandexMapScript)
-    this.scriptAttached = true
-
-    this.$emit('yandexmap-attached')
-
-    yandexMapScript.onload = () => {
-      this.$emit('yandexmap-loaded')
-      window.ymaps.ready(() => {
-        this.ymapReady = true
-        this.$emit('yandexmap-ready')
-      })
-    }
-
-    this.$watch(
-      () => {
-        return Vue.yandexMapOptions
-      },
-      function (newVal, oldVal) {
-        console.info('1111111111111111111111111111')
-      },
-      {
-        deep: true
-      }
-    )
-  },
+  created: function () {},
   methods: {
+    attachScript: function () {
+      if (this.scriptAttached) {
+        return
+      }
+      let yandexMapScript = document.createElement('SCRIPT')
+      yandexMapScript.setAttribute('src', '//api-maps.yandex.ru/' + Vue.yandexMapOptions.version + '/?lang=' + Vue.yandexMapOptions.lang)
+      yandexMapScript.setAttribute('async', '')
+      yandexMapScript.setAttribute('defer', '')
+
+      yandexMapScript.onload = () => {
+        this.$emit('yandexmap-loaded')
+        window.ymaps.ready(() => {
+          this.ymapReady = true
+          this.$emit('yandexmap-ready')
+        })
+      }
+      document.body.appendChild(yandexMapScript)
+      this.scriptAttached = true
+      this.$emit('yandexmap-attached')
+    },
     init: function (options) {
       console.log('init ========', options)
     },

@@ -9,7 +9,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, '../dist'),
         publicPath: '/dist/',
-        library:'vue-js-modal',
+        library:'vue-yandex-map',
         libraryTarget: 'umd'
     },
     module: {
