@@ -6,6 +6,7 @@
         scrollZoom: false<br>
         <yandex-map
             @created="mapCreated"
+            @boundschange="boundschange"
             :center="[55.681576, 37.488467]"
             :zoom="10"
             :dragable="false"
@@ -24,6 +25,7 @@
             :zoom="10"
             @created="mapCreated2"
             @destroy="mapDestroy2"
+            @boundschange="boundschange"
             v-if="showMap === true">
             <region-select
                 @changed="regionChanged"
@@ -61,6 +63,9 @@
         // console.log('app mounted', this.$yandexmap)
       },
       methods: {
+        boundschange: function ($map, bounds) {
+          console.log(bounds)
+        },
         mapCreated: function ($map) {
 
           console.info('APP: mapCreated')
