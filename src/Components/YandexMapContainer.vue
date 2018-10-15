@@ -109,9 +109,6 @@ export default {
       this.init()
     }
   },
-  watch: {
-
-  },
   beforeDestroy () {
     this.$emit('destroy', this.map)
   }
