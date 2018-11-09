@@ -4,6 +4,7 @@
         <div :id="mapId" :style="style" :class="mapClass + '__container'"></div>
     </div>
 </template>
+
 <script>
 import YandexMapBus from './../yandex-map-bus'
 

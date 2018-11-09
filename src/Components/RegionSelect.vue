@@ -3,6 +3,7 @@
         <a @click="buttonClick" :class="computedButtonClass">{{computedButtonText}}</a>
     </div>
 </template>
+
 <script>
 import YandexMapBus from './../yandex-map-bus'
 

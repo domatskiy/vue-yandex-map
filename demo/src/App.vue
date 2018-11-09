@@ -1,6 +1,7 @@
 <template>
     <div id="app">
 
+        <h2>Map 1</h2>
         zoom: 10<br>
         dragable: false<br>
         scrollZoom: false<br>
@@ -18,6 +19,7 @@
         </yandex-map>
         <br>
         <br>
+        <h2>Map 2</h2>
         dragable: true<br>
         scrollZoom: true<br>
         <button @click="showMap = !showMap">{{showMap ? 'hide map' : 'show map'}}</button>
@@ -42,7 +44,7 @@
     import YandexMap from 'plugin'
 
     Vue.use(YandexMap, {
-      version: '2.1',
+      version: '2.1'
     })
 
     export default {

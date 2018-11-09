@@ -1,10 +1,10 @@
 {
   "name": "vue-yandex-map",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "vue yandex-map controller",
   "author": "Domatskiy",
   "private": false,
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/domatskiy/vue-yandex-map.git"
