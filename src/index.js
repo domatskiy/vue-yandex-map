@@ -14,7 +14,8 @@ const YandexMapPlugin = {
     let opts = {}
     Object.assign(opts, {
       version: '2.1',
-      lang: 'ru_RU'
+      lang: 'ru_RU',
+      apiKey: '',
     }, options)
     Vue.yandexMapOptions = opts
 

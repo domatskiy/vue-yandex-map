@@ -3,6 +3,7 @@
         <a @click="buttonClick" :class="computedButtonClass">{{computedButtonText}}</a>
     </div>
 </template>
+
 <script>
 import YandexMapBus from './../yandex-map-bus'
 
@@ -54,10 +55,13 @@ export default {
       e.stopPropagation()
       if (this.selected === false && this.drag === false) {
         this.initDragger()
+        this.$emit('status', 'init')
       } else if (this.selected === false && this.drag === true) {
         this.stopDragger()
+        this.$emit('status', 'cancel')
       } else if (this.selected === true) {
         this.removeDragger()
+        this.$emit('status', 'selected')
       }
     },
     init: function ($map) {

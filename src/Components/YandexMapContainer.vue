@@ -4,6 +4,7 @@
         <div :id="mapId" :style="style" :class="mapClass + '__container'"></div>
     </div>
 </template>
+
 <script>
 import YandexMapBus from './../yandex-map-bus'
 
@@ -108,9 +109,6 @@ export default {
     if (this.YandexMapBus.ymapReady) {
       this.init()
     }
-  },
-  watch: {
-
   },
   beforeDestroy () {
     this.$emit('destroy', this.map)

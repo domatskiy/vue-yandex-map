@@ -1,8 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-
-//  "build:client": "cross-env NODE_ENV=production webpack --config ./build/webpack.client.config.js --progress --hide-modules",
+// const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     entry: path.resolve(__dirname, '../src/index.js'),
@@ -25,16 +23,34 @@ module.exports = {
             }
         ]
     },
-    // devtool: '#source-map',
+    externals: {
+        vue: 'vue'
+    },
+    resolve: {
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
+    },
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true
+    },
+    performance: {
+        hints: false
+    },
+    devtool: '#source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('production'),
             },
         }),
-        new UglifyJSPlugin({
+        new webpack.LoaderOptionsPlugin({
+            minimize: true
+        })
+        /*new UglifyJSPlugin({
             mangle: false,
             beautify: true
-        })
+        })*/
     ]
 }
