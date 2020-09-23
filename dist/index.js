@@ -1,5 +1,5 @@
 !function(root, factory) {
-    "object" == typeof exports && "object" == typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define([], factory) : "object" == typeof exports ? exports["vue-js-modal"] = factory() : root["vue-js-modal"] = factory();
+    "object" == typeof exports && "object" == typeof module ? module.exports = factory() : "function" == typeof define && define.amd ? define([], factory) : "object" == typeof exports ? exports["vue-yandex-map"] = factory() : root["vue-yandex-map"] = factory();
 }("undefined" != typeof self ? self : this, function() {
     return function(modules) {
         function __webpack_require__(moduleId) {
@@ -30,7 +30,12 @@
         }, __webpack_require__.o = function(object, property) {
             return Object.prototype.hasOwnProperty.call(object, property);
         }, __webpack_require__.p = "/dist/", __webpack_require__(__webpack_require__.s = 18);
-    }([ function(module, exports, __webpack_require__) {
+    }([ function(module, exports) {
+        var core = module.exports = {
+            version: "2.5.7"
+        };
+        "number" == typeof __e && (__e = core);
+    }, function(module, exports, __webpack_require__) {
         module.exports = !__webpack_require__(4)(function() {
             return 7 != Object.defineProperty({}, "a", {
                 get: function() {
@@ -41,11 +46,6 @@
     }, function(module, exports) {
         var global = module.exports = "undefined" != typeof window && window.Math == Math ? window : "undefined" != typeof self && self.Math == Math ? self : Function("return this")();
         "number" == typeof __g && (__g = global);
-    }, function(module, exports) {
-        var core = module.exports = {
-            version: "2.5.5"
-        };
-        "number" == typeof __e && (__e = core);
     }, function(module, exports) {
         module.exports = function(it) {
             return "object" == typeof it ? null !== it : "function" == typeof it;
@@ -70,7 +70,7 @@
         }
         module.exports = g;
     }, function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(1), core = __webpack_require__(2), ctx = __webpack_require__(22), hide = __webpack_require__(24), has = __webpack_require__(8), $export = function(type, name, source) {
+        var global = __webpack_require__(2), core = __webpack_require__(0), ctx = __webpack_require__(22), hide = __webpack_require__(24), has = __webpack_require__(8), $export = function(type, name, source) {
             var key, own, out, IS_FORCED = type & $export.F, IS_GLOBAL = type & $export.G, IS_STATIC = type & $export.S, IS_PROTO = type & $export.P, IS_BIND = type & $export.B, IS_WRAP = type & $export.W, exports = IS_GLOBAL ? core : core[name] || (core[name] = {}), expProto = exports.prototype, target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {}).prototype;
             IS_GLOBAL && (source = name);
             for (key in source) (own = !IS_FORCED && target && void 0 !== target[key]) && has(exports, key) || (out = own ? target[key] : source[key], 
@@ -99,7 +99,7 @@
         $export.U = 64, $export.R = 128, module.exports = $export;
     }, function(module, exports, __webpack_require__) {
         var anObject = __webpack_require__(25), IE8_DOM_DEFINE = __webpack_require__(26), toPrimitive = __webpack_require__(28), dP = Object.defineProperty;
-        exports.f = __webpack_require__(0) ? Object.defineProperty : function(O, P, Attributes) {
+        exports.f = __webpack_require__(1) ? Object.defineProperty : function(O, P, Attributes) {
             if (anObject(O), P = toPrimitive(P, !0), anObject(Attributes), IE8_DOM_DEFINE) try {
                 return dP(O, P, Attributes);
             } catch (e) {}
@@ -2580,7 +2580,7 @@
             }, inBrowser && setTimeout(function() {
                 config.devtools && devtools && devtools.emit("init", Vue);
             }, 0), __webpack_exports__.a = Vue;
-        }).call(__webpack_exports__, __webpack_require__(5), __webpack_require__(49).setImmediate);
+        }).call(__webpack_exports__, __webpack_require__(5), __webpack_require__(50).setImmediate);
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         var __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__ = __webpack_require__(15);
@@ -2637,6 +2637,8 @@
                     return this.map;
                 },
                 init: function() {
+                    var _this = this;
+                    console.log("on yandexmap-ready");
                     var center = this.center ? this.center : [ 55.753215, 37.622504 ];
                     this.map = new window.ymaps.Map(this.mapId, {
                         center: center,
@@ -2644,15 +2646,20 @@
                         controls: this.controls,
                         type: "yandex#map"
                     }, {}), this.dragable || this.map.behaviors.disable("drag"), this.scrollZoom || this.map.behaviors.disable("scrollZoom"), 
-                    this.$emit("created", this.map);
+                    this.map.events.add("click", function(e) {
+                        var position = e.get("coordPosition");
+                        _this.$emit("click", _this.map, position);
+                    }), this.map.events.add("boundschange", function(e) {
+                        var newBounds = e.get("newBounds");
+                        _this.$emit("boundschange", _this.map, newBounds);
+                    }), this.$emit("created", this.map);
                 }
             },
-            created: function() {},
             mounted: function() {
-                var _this = this;
-                this.YandexMapBus.$on("yandexmap-attached", function() {}), this.YandexMapBus.$on("yandexmap-loaded", function() {}), 
-                this.YandexMapBus.$on("yandexmap-ready", function() {
-                    _this.init();
+                var _this2 = this;
+                this.YandexMapBus.attachScript(), this.YandexMapBus.$on("yandexmap-attached", function() {}), 
+                this.YandexMapBus.$on("yandexmap-loaded", function() {}), this.YandexMapBus.$on("yandexmap-ready", function() {
+                    _this2.init();
                 }), this.YandexMapBus.ymapReady && this.init();
             },
             watch: {},
@@ -2672,24 +2679,22 @@
                     scriptAttached: !1
                 };
             },
-            created: function() {
-                var _this = this, yandexMapScript = document.createElement("SCRIPT");
-                yandexMapScript.setAttribute("src", "//api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang), 
-                yandexMapScript.setAttribute("async", ""), yandexMapScript.setAttribute("defer", ""), 
-                document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached"), 
-                yandexMapScript.onload = function() {
-                    _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
-                        _this.ymapReady = !0, _this.$emit("yandexmap-ready");
-                    });
-                }, this.$watch(function() {
-                    return __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions;
-                }, function(newVal, oldVal) {
-                    console.info("1111111111111111111111111111");
-                }, {
-                    deep: !0
-                });
-            },
+            created: function() {},
             methods: {
+                attachScript: function() {
+                    var _this = this;
+                    if (!this.scriptAttached) {
+                        var src = "//api-maps.yandex.ru/" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.version + "/?lang=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.lang;
+                        __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.apiKey.length && (src += "apikey=" + __WEBPACK_IMPORTED_MODULE_0_vue__.a.yandexMapOptions.apiKey);
+                        var yandexMapScript = document.createElement("SCRIPT");
+                        yandexMapScript.setAttribute("src", src), yandexMapScript.setAttribute("async", ""), 
+                        yandexMapScript.setAttribute("defer", ""), yandexMapScript.onload = function() {
+                            _this.$emit("yandexmap-loaded"), window.ymaps.ready(function() {
+                                _this.ymapReady = !0, _this.$emit("yandexmap-ready");
+                            });
+                        }, document.body.appendChild(yandexMapScript), this.scriptAttached = !0, this.$emit("yandexmap-attached");
+                    }
+                },
                 init: function(options) {
                     console.log("init ========", options);
                 },
@@ -2802,24 +2807,23 @@
                     this.map.behaviors.disable("drag"), this.map.events.add("mousedown", function(e) {
                         var coordinates = [ _this.convert(e.get("position")) ], listeners = _this.dragger.events.group();
                         listeners.add("move", function(e) {
-                            coordinates.push(this.convert(e.get("position"))), this.dragger_polyline ? this.dragger_polyline.geometry.setCoordinates(coordinates.slice()) : (this.dragger_polyline = new ymaps.Polyline(coordinates.slice(), {}, {
+                            coordinates.push(_this.convert(e.get("position"))), _this.dragger_polyline ? _this.dragger_polyline.geometry.setCoordinates(coordinates.slice()) : (_this.dragger_polyline = new ymaps.Polyline(coordinates.slice(), {}, {
                                 strokeColor: "#e4300e",
                                 strokeWidth: 2,
                                 strokeStyle: "0 0"
-                            }), this.map.geoObjects.add(vm.dragger_polyline));
+                            }), _this.map.geoObjects.add(vm.dragger_polyline));
                         }).add("stop", function(e) {
-                            console.log("map stop event"), this.drag = !1, cursor.remove(), this.map.behaviors.enable("drag"), 
-                            vm.dragger_polyline && (this.map.geoObjects.remove(vm.dragger_polyline), this.dragger_polyline = null), 
-                            coordinates.length > 2 ? (this.dragger_polygon && this.map.geoObjects.remove(vm.dragger_polygon), 
-                            this.dragger_polygon = new ymaps.Polygon([ coordinates.slice() ], {
+                            _this.drag = !1, cursor.remove(), _this.map.behaviors.enable("drag"), _this.dragger_polyline && (_this.map.geoObjects.remove(vm.dragger_polyline), 
+                            _this.dragger_polyline = null), coordinates.length > 2 ? (_this.dragger_polygon && _this.map.geoObjects.remove(vm.dragger_polygon), 
+                            _this.dragger_polygon = new ymaps.Polygon([ coordinates.slice() ], {
                                 hintContent: ""
                             }, {
                                 fillColor: "#6699ff",
                                 interactivityModel: "default#transparent",
                                 strokeWidth: 1,
                                 opacity: .2
-                            }), this.map.geoObjects.add(vm.dragger_polygon), this.$emit("changed", coordinates, vm.dragger_polygon), 
-                            this.selected = !0) : (this.selected = !1, this.$emit("changed", [], vm.dragger_polygon)), 
+                            }), _this.map.geoObjects.add(vm.dragger_polygon), _this.$emit("changed", coordinates, vm.dragger_polygon), 
+                            _this.selected = !0) : (_this.selected = !1, _this.$emit("changed", [], vm.dragger_polygon)), 
                             listeners.removeAll();
                         }), _this.dragger.start(e);
                     });
@@ -2842,7 +2846,7 @@
                 this.mapInit = !0), __WEBPACK_IMPORTED_MODULE_0__yandex_map_bus__.a.$on("yandexmap-ready", function() {
                     _this2.dragger = new ymaps.util.Dragger(), _this2.mapInit = !0;
                 }), this.$parent.$on("created", function($map) {
-                    console.log("map created"), _this2.init($map);
+                    _this2.init($map);
                 });
             },
             computed: {
@@ -2859,7 +2863,7 @@
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         });
-        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(19), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(44), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(45), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(13), yandexMap = function() {
+        var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__ = __webpack_require__(19), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign__), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__ = __webpack_require__(45), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck__), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__ = __webpack_require__(46), __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_createClass__), __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(13), yandexMap = function() {
             function yandexMap(options) {
                 __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_classCallCheck___default()(this, yandexMap);
             }
@@ -2874,11 +2878,12 @@
                 var opts = {};
                 __WEBPACK_IMPORTED_MODULE_0_babel_runtime_core_js_object_assign___default()(opts, {
                     version: "2.1",
-                    lang: "ru_RU"
+                    lang: "ru_RU",
+                    apiKey: ""
                 }, options), __WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions = opts;
                 var $yandexmap = new yandexMap(__WEBPACK_IMPORTED_MODULE_3_vue__.a.yandexMapOptions);
-                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(52)), 
-                VueInstance.component("region-select", __webpack_require__(54));
+                VueInstance.prototype.$yandexmap = $yandexmap, VueInstance.component("yandex-map", __webpack_require__(53)), 
+                VueInstance.component("region-select", __webpack_require__(55));
             }
         };
         "undefined" != typeof window && window.Vue && window.Vue.use(YandexMapPlugin), __webpack_exports__.default = YandexMapPlugin;
@@ -2888,7 +2893,7 @@
             __esModule: !0
         };
     }, function(module, exports, __webpack_require__) {
-        __webpack_require__(21), module.exports = __webpack_require__(2).Object.assign;
+        __webpack_require__(21), module.exports = __webpack_require__(0).Object.assign;
     }, function(module, exports, __webpack_require__) {
         var $export = __webpack_require__(6);
         $export($export.S + $export.F, "Object", {
@@ -2925,7 +2930,7 @@
         };
     }, function(module, exports, __webpack_require__) {
         var dP = __webpack_require__(7), createDesc = __webpack_require__(29);
-        module.exports = __webpack_require__(0) ? function(object, key, value) {
+        module.exports = __webpack_require__(1) ? function(object, key, value) {
             return dP.f(object, key, createDesc(1, value));
         } : function(object, key, value) {
             return object[key] = value, object;
@@ -2937,7 +2942,7 @@
             return it;
         };
     }, function(module, exports, __webpack_require__) {
-        module.exports = !__webpack_require__(0) && !__webpack_require__(4)(function() {
+        module.exports = !__webpack_require__(1) && !__webpack_require__(4)(function() {
             return 7 != Object.defineProperty(__webpack_require__(27)("div"), "a", {
                 get: function() {
                     return 7;
@@ -2945,7 +2950,7 @@
             }).a;
         });
     }, function(module, exports, __webpack_require__) {
-        var isObject = __webpack_require__(3), document = __webpack_require__(1).document, is = isObject(document) && isObject(document.createElement);
+        var isObject = __webpack_require__(3), document = __webpack_require__(2).document, is = isObject(document) && isObject(document.createElement);
         module.exports = function(it) {
             return is ? document.createElement(it) : {};
         };
@@ -2970,7 +2975,7 @@
         };
     }, function(module, exports, __webpack_require__) {
         "use strict";
-        var getKeys = __webpack_require__(31), gOPS = __webpack_require__(41), pIE = __webpack_require__(42), toObject = __webpack_require__(43), IObject = __webpack_require__(10), $assign = Object.assign;
+        var getKeys = __webpack_require__(31), gOPS = __webpack_require__(42), pIE = __webpack_require__(43), toObject = __webpack_require__(44), IObject = __webpack_require__(10), $assign = Object.assign;
         module.exports = !$assign || __webpack_require__(4)(function() {
             var A = {}, B = {}, S = Symbol(), K = "abcdefghijklmnopqrst";
             return A[S] = 7, K.split("").forEach(function(k) {
@@ -2981,7 +2986,7 @@
             return T;
         } : $assign;
     }, function(module, exports, __webpack_require__) {
-        var $keys = __webpack_require__(32), enumBugKeys = __webpack_require__(40);
+        var $keys = __webpack_require__(32), enumBugKeys = __webpack_require__(41);
         module.exports = Object.keys || function(O) {
             return $keys(O, enumBugKeys);
         };
@@ -3020,15 +3025,21 @@
             return index = toInteger(index), index < 0 ? max(index + length, 0) : min(index, length);
         };
     }, function(module, exports, __webpack_require__) {
-        var shared = __webpack_require__(38)("keys"), uid = __webpack_require__(39);
+        var shared = __webpack_require__(38)("keys"), uid = __webpack_require__(40);
         module.exports = function(key) {
             return shared[key] || (shared[key] = uid(key));
         };
     }, function(module, exports, __webpack_require__) {
-        var global = __webpack_require__(1), store = global["__core-js_shared__"] || (global["__core-js_shared__"] = {});
-        module.exports = function(key) {
-            return store[key] || (store[key] = {});
-        };
+        var core = __webpack_require__(0), global = __webpack_require__(2), store = global["__core-js_shared__"] || (global["__core-js_shared__"] = {});
+        (module.exports = function(key, value) {
+            return store[key] || (store[key] = void 0 !== value ? value : {});
+        })("versions", []).push({
+            version: core.version,
+            mode: __webpack_require__(39) ? "pure" : "global",
+            copyright: "© 2018 Denis Pushkarev (zloirock.ru)"
+        });
+    }, function(module, exports) {
+        module.exports = !0;
     }, function(module, exports) {
         var id = 0, px = Math.random();
         module.exports = function(key) {
@@ -3053,7 +3064,7 @@
     }, function(module, exports, __webpack_require__) {
         "use strict";
         exports.__esModule = !0;
-        var _defineProperty = __webpack_require__(46), _defineProperty2 = function(obj) {
+        var _defineProperty = __webpack_require__(47), _defineProperty2 = function(obj) {
             return obj && obj.__esModule ? obj : {
                 default: obj
             };
@@ -3073,18 +3084,18 @@
         }();
     }, function(module, exports, __webpack_require__) {
         module.exports = {
-            default: __webpack_require__(47),
+            default: __webpack_require__(48),
             __esModule: !0
         };
     }, function(module, exports, __webpack_require__) {
-        __webpack_require__(48);
-        var $Object = __webpack_require__(2).Object;
+        __webpack_require__(49);
+        var $Object = __webpack_require__(0).Object;
         module.exports = function(it, key, desc) {
             return $Object.defineProperty(it, key, desc);
         };
     }, function(module, exports, __webpack_require__) {
         var $export = __webpack_require__(6);
-        $export($export.S + $export.F * !__webpack_require__(0), "Object", {
+        $export($export.S + $export.F * !__webpack_require__(1), "Object", {
             defineProperty: __webpack_require__(7).f
         });
     }, function(module, exports, __webpack_require__) {
@@ -3111,7 +3122,7 @@
                 msecs >= 0 && (item._idleTimeoutId = setTimeout(function() {
                     item._onTimeout && item._onTimeout();
                 }, msecs));
-            }, __webpack_require__(50), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
+            }, __webpack_require__(51), exports.setImmediate = "undefined" != typeof self && self.setImmediate || void 0 !== global && global.setImmediate || this && this.setImmediate, 
             exports.clearImmediate = "undefined" != typeof self && self.clearImmediate || void 0 !== global && global.clearImmediate || this && this.clearImmediate;
         }).call(exports, __webpack_require__(5));
     }, function(module, exports, __webpack_require__) {
@@ -3212,7 +3223,7 @@
                     }(), attachTo.setImmediate = setImmediate, attachTo.clearImmediate = clearImmediate;
                 }
             }("undefined" == typeof self ? void 0 === global ? this : global : self);
-        }).call(exports, __webpack_require__(5), __webpack_require__(51));
+        }).call(exports, __webpack_require__(5), __webpack_require__(52));
     }, function(module, exports) {
         function defaultSetTimout() {
             throw new Error("setTimeout has not been defined");
@@ -3307,8 +3318,8 @@
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         });
-        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(53), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_4a244206_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
-        Component.options.__file = "src\\Components\\YandexMapContainer.vue", __webpack_exports__.default = Component.exports;
+        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__ = __webpack_require__(14), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_fe524fb4_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__ = __webpack_require__(54), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_fe524fb4_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_fe524fb4_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_YandexMapContainer_vue__.b, !1, null, null, null);
+        Component.options.__file = "src/Components/YandexMapContainer.vue", __webpack_exports__.default = Component.exports;
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         __webpack_require__.d(__webpack_exports__, "a", function() {
@@ -3332,20 +3343,20 @@
     }, function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         function injectStyle(context) {
-            disposed || __webpack_require__(55);
+            disposed || __webpack_require__(56);
         }
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         });
-        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__ = __webpack_require__(17), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__ = __webpack_require__(60), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), disposed = !1, __vue_styles__ = injectStyle, Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a1ddf200_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.b, !1, __vue_styles__, null, null);
-        Component.options.__file = "src\\Components\\RegionSelect.vue", __webpack_exports__.default = Component.exports;
+        var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__ = __webpack_require__(17), __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2c76b520_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__ = __webpack_require__(61), __WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__ = __webpack_require__(16), disposed = !1, __vue_styles__ = injectStyle, Component = Object(__WEBPACK_IMPORTED_MODULE_2__node_modules_vue_loader_lib_runtime_component_normalizer__.a)(__WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2c76b520_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.a, __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2c76b520_hasScoped_false_optionsId_0_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_RegionSelect_vue__.b, !1, __vue_styles__, null, null);
+        Component.options.__file = "src/Components/RegionSelect.vue", __webpack_exports__.default = Component.exports;
     }, function(module, exports, __webpack_require__) {
-        var content = __webpack_require__(56);
+        var content = __webpack_require__(57);
         "string" == typeof content && (content = [ [ module.i, content, "" ] ]), content.locals && (module.exports = content.locals);
-        var add = __webpack_require__(58).default;
-        add("f284a574", content, !1, {});
+        var add = __webpack_require__(59).default;
+        add("2be15526", content, !1, {});
     }, function(module, exports, __webpack_require__) {
-        exports = module.exports = __webpack_require__(57)(!1), exports.push([ module.i, "\n.yandex-map_region {\n  position: relative;\n  text-align: right;\n}\n.yandex-map_region a {\n  z-index: 120;\n  display: inline-block;\n  position: absolute;\n  padding: 4px 10px;\n  top: 10px;\n  right: 10px;\n  background-color: #30b9e8;\n  color: white;\n  cursor: pointer;\n  text-decoration: none;\n}\n.yandex-map_region a.processing {\n  background-color: #7fc54e;\n}\n.yandex-map_region a.active {\n  background-color: #cc242b;\n}\n", "" ]);
+        exports = module.exports = __webpack_require__(58)(!1), exports.push([ module.i, "\n.yandex-map_region {\n  position: relative;\n  text-align: right;\n}\n.yandex-map_region a {\n  z-index: 120;\n  display: inline-block;\n  position: absolute;\n  padding: 4px 10px;\n  top: 10px;\n  right: 10px;\n  background-color: #30b9e8;\n  color: white;\n  cursor: pointer;\n  text-decoration: none;\n}\n.yandex-map_region a.processing {\n  background-color: #7fc54e;\n}\n.yandex-map_region a.active {\n  background-color: #cc242b;\n}\n", "" ]);
     }, function(module, exports) {
         function cssWithMappingToString(item, useSourceMap) {
             var content = item[1] || "", cssMapping = item[3];
@@ -3464,7 +3475,7 @@
         Object.defineProperty(__webpack_exports__, "__esModule", {
             value: !0
         }), __webpack_exports__.default = addStylesClient;
-        var __WEBPACK_IMPORTED_MODULE_0__listToStyles__ = __webpack_require__(59), hasDocument = "undefined" != typeof document;
+        var __WEBPACK_IMPORTED_MODULE_0__listToStyles__ = __webpack_require__(60), hasDocument = "undefined" != typeof document;
         if ("undefined" != typeof DEBUG && DEBUG && !hasDocument) throw new Error("vue-style-loader cannot be used in a non-browser environment. Use { target: 'node' } in your Webpack config to indicate a server-rendering environment.");
         var stylesInDom = {}, head = hasDocument && (document.head || document.getElementsByTagName("head")[0]), singletonElement = null, singletonCounter = 0, isProduction = !1, noop = function() {}, options = null, ssrIdKey = "data-vue-ssr-id", isOldIE = "undefined" != typeof navigator && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase()), replaceText = function() {
             var textStore = [];
