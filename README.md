@@ -125,11 +125,14 @@ export default {
 | Name   | Type  | Required | Default | Description |
 | ------ |:-----:| :---------:| --------|:---------|
 | button-text | String | false  |        | set button text |
+| button-selected-text | String | false  |        | set button selected text |
+| button-cancel-text | String | false  |        | set button cancel text |
 | region | Array | false  | []      | set region |
 
 ### region-select events
 | Name   | params | Description |
 | ------ |:-----:|:---------|
-| changed |   |  when changing the selection |
+| changed | coordinates |  when changing the selection |
+| status | status |  when changing the selection status [init, selected, cancel]|
 
 https://domatskiy.github.io/vue-yandex-map/

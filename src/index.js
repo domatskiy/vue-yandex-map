@@ -10,20 +10,20 @@ class yandexMap {
 }
 
 const YandexMapPlugin = {
-  install (VueInstance, options) {
+  install (VueInstance, options = {}) {
     let opts = {}
     Object.assign(opts, {
       version: '2.1',
       lang: 'ru_RU',
-      apiKey: ''
+      apiKey: '',
     }, options)
     Vue.yandexMapOptions = opts
 
     // console.log('install, merge options', Vue.yandexMapOptions)
-    const $yandexMap = new yandexMap (Vue.yandexMapOptions)
-    VueInstance.prototype.$yandexmap = $yandexMap
-    VueInstance.component('yandex-map', require('./Components/YandexMapContainer.vue'))
-    VueInstance.component('region-select', require('./Components/RegionSelect.vue'))
+    const $yandexmap = new yandexMap (Vue.yandexMapOptions)
+    VueInstance.prototype.$yandexmap = $yandexmap
+    VueInstance.component('yandex-map', require('./Components/YandexMapContainer.vue').default)
+    VueInstance.component('region-select', require('./Components/RegionSelect.vue').default)
   }
 }
 
