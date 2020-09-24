@@ -46,7 +46,7 @@ module.exports = {
             },
         }),
         new webpack.LoaderOptionsPlugin({
-            minimize: true
+            compress: { warnings: false }
         })
         /*new UglifyJSPlugin({
             mangle: false,
