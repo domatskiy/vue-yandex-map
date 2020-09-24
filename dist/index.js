@@ -646,8 +646,8 @@ var YandexMapPlugin = {
     }, options);
     __WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions = opts;
 
-    var $yandexmap = new yandexMap(__WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions);
-    VueInstance.prototype.$yandexmap = $yandexmap;
+    var $yandexMap = new yandexMap(__WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions);
+    VueInstance.prototype.$yandexmap = $yandexMap;
     VueInstance.component('yandex-map', __webpack_require__(6));
     VueInstance.component('region-select', __webpack_require__(8));
   }
