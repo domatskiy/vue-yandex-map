@@ -205,6 +205,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_0__;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 
 
 var YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
@@ -226,7 +228,18 @@ var YandexMapBus = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a({
       if (this.scriptAttached) {
         return;
       }
-      var src = '//api-maps.yandex.ru/' + __WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions.version + '/?lang=' + __WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions.lang;
+
+      var yandexMapOptions = {
+        version: '2.1',
+        lang: 'ru_RU',
+        apiKey: ''
+      };
+
+      if (_typeof(__WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions) === 'object') {
+        Object.assign(yandexMapOptions, __WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions);
+      }
+
+      var src = '//api-maps.yandex.ru/' + yandexMapOptions.version + '/?lang=' + yandexMapOptions.lang;
       if (__WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions.apiKey.length) {
         src += '&apikey=' + __WEBPACK_IMPORTED_MODULE_0_vue___default.a.yandexMapOptions.apiKey;
       }

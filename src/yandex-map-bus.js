@@ -16,7 +16,18 @@ const YandexMapBus = new Vue({
       if (this.scriptAttached) {
         return
       }
-      let src = '//api-maps.yandex.ru/' + Vue.yandexMapOptions.version + '/?lang=' + Vue.yandexMapOptions.lang
+
+      let yandexMapOptions = {
+        version: '2.1',
+        lang: 'ru_RU',
+        apiKey: '',
+      };
+
+      if (typeof Vue.yandexMapOptions === 'object') {
+        Object.assign(yandexMapOptions, Vue.yandexMapOptions);
+      }
+
+      let src = '//api-maps.yandex.ru/' + yandexMapOptions.version + '/?lang=' + yandexMapOptions.lang
       if (Vue.yandexMapOptions.apiKey.length) {
         src += '&apikey=' + Vue.yandexMapOptions.apiKey
       }
