@@ -65,7 +65,9 @@ export default {
         zoom: this.zoom,
         controls: this.controls, // 'zoomControl' , 'typeSelector',  'fullscreenControl'
         type: 'yandex#map'
-      }, {})
+      }, {
+        suppressMapOpenBlock: true
+      })
 
       if (!this.dragable) {
         this.map.behaviors.disable('drag')
